@@ -1,0 +1,3054 @@
+{
+  "enumeration_complete": true,
+  "errors": [],
+  "has_engine_errors": false,
+  "regressions": {
+    "ok": true,
+    "runs": [
+      {
+        "ok": true,
+        "returncode": 0,
+        "script": "test_c0.py",
+        "stderr": "test_01_definicje_grafow (__main__.GraphConstruction.test_01_definicje_grafow) ... ok\ntest_02_108_przebiegow_zgodnych_z_bazowym_B21 (__main__.GraphConstruction.test_02_108_przebiegow_zgodnych_z_bazowym_B21) ... ok\ntest_03_powrot_do_wezla_i_drugie_wystapienie_dzialania (__main__.GraphConstruction.test_03_powrot_do_wezla_i_drugie_wystapienie_dzialania) ... ok\ntest_04_limit_tur_przerywa_petle (__main__.GraphConstruction.test_04_limit_tur_przerywa_petle) ... ok\ntest_05_wartosc_konca_fazy_steruje_krawedzia (__main__.GraphConstruction.test_05_wartosc_konca_fazy_steruje_krawedzia) ... ok\ntest_06_aktualizacja_R_i_P_jest_atomowa_przy_bledzie (__main__.GraphConstruction.test_06_aktualizacja_R_i_P_jest_atomowa_przy_bledzie) ... ok\ntest_07_po_ukonczeniu_jedna_postac_nie_blokuje_drugiej (__main__.GraphConstruction.test_07_po_ukonczeniu_jedna_postac_nie_blokuje_drugiej) ... ok\ntest_08_wybor_niedostepny_odrzucony_bez_zmiany_stanu (__main__.GraphConstruction.test_08_wybor_niedostepny_odrzucony_bez_zmiany_stanu) ... ok\ntest_09_pozycje_nie_sa_ujawniane_uczestnikowi (__main__.GraphConstruction.test_09_pozycje_nie_sa_ujawniane_uczestnikowi) ... ok\ntest_10_brak_sciezki_nie_wybiera_krawedzi_domyslnie (__main__.GraphConstruction.test_10_brak_sciezki_nie_wybiera_krawedzi_domyslnie) ... ok\ntest_11_wykonanie_po_zakonczeniu_odrzucone (__main__.GraphConstruction.test_11_wykonanie_po_zakonczeniu_odrzucone) ... ok\ntest_12_korekta_informacyjna_B22_swiat_i_statusy_bez_zmian (__main__.GraphConstruction.test_12_korekta_informacyjna_B22_swiat_i_statusy_bez_zmian) ... ok\ntest_13_regresja_kolejnosci_regul_2x108x3 (__main__.GraphConstruction.test_13_regresja_kolejnosci_regul_2x108x3) ... ok\n\n----------------------------------------------------------------------\nRan 13 tests in 4.920s\n\nOK\n",
+        "stdout": ""
+      }
+    ]
+  },
+  "results": [
+    {
+      "enumerated": 54,
+      "enumeration_complete": true,
+      "errors": [],
+      "information_audit": {
+        "checks": [
+          "choice_effect",
+          "K_only_gate",
+          "source_time_mode",
+          "effect_owner"
+        ],
+        "definition_errors": [],
+        "effect_findings": []
+      },
+      "paths": [
+        {
+          "actions": {
+            "check_independent": "WYKONANE",
+            "report_account": "POTWIERDZONE",
+            "stop_send": "WYKONANE"
+          },
+          "choices": [
+            {
+              "doctor": "stop"
+            },
+            {
+              "doctor": "independent"
+            },
+            {
+              "doctor": "report_account"
+            }
+          ],
+          "configuration": "COMPROMISED",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-RESULT-COMPROMISE",
+                "source": "email_admin",
+                "text": "Weryfikacja techniczna wykazała przejęcie skrzynki."
+              },
+              {
+                "id": "CL-ADMIN-SECURED",
+                "source": "email_admin",
+                "text": "Administrator zakończył nieuprawnione sesje."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "f04baa2cd942cbcc01db47400e947a8cdb7d70cdc4705dc9b61be7d649320de8",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": true,
+            "data_sent": false,
+            "defer_count": 0,
+            "ignored_count": 0,
+            "incident_report": "account",
+            "mailbox_compromised": true,
+            "mailbox_secured": true,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "check_independent": "WYKONANE",
+            "report_spoof": "POTWIERDZONE",
+            "stop_send": "WYKONANE"
+          },
+          "choices": [
+            {
+              "doctor": "stop"
+            },
+            {
+              "doctor": "independent"
+            },
+            {
+              "doctor": "report_spoof"
+            }
+          ],
+          "configuration": "COMPROMISED",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-RESULT-COMPROMISE",
+                "source": "email_admin",
+                "text": "Weryfikacja techniczna wykazała przejęcie skrzynki."
+              },
+              {
+                "id": "CL-ADMIN-REPORT-SPOOF",
+                "source": "email_admin",
+                "text": "Zgłoszenie podejrzenia podszycia zarejestrowano, bez automatycznej zmiany stanu skrzynki."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "e04db4651ad91ba04c8d0408437d8865a0fd921286a926703bb6f12f3f434458",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": true,
+            "data_sent": false,
+            "defer_count": 0,
+            "ignored_count": 0,
+            "incident_report": "spoof",
+            "mailbox_compromised": true,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "check_independent": "WYKONANE",
+            "further_investigation": "ZLECONE",
+            "stop_send": "WYKONANE"
+          },
+          "choices": [
+            {
+              "doctor": "stop"
+            },
+            {
+              "doctor": "independent"
+            },
+            {
+              "doctor": "investigate"
+            }
+          ],
+          "configuration": "COMPROMISED",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-RESULT-COMPROMISE",
+                "source": "email_admin",
+                "text": "Weryfikacja techniczna wykazała przejęcie skrzynki."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "778a05853305b7ec67e1a90a7544ee6d59d7ead5334fb341c2490ef2b17c0e39",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": true,
+            "data_sent": false,
+            "defer_count": 0,
+            "ignored_count": 0,
+            "incident_report": "none",
+            "mailbox_compromised": true,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "check_display": "WYKONANE",
+            "report_account": "POTWIERDZONE",
+            "stop_send": "WYKONANE"
+          },
+          "choices": [
+            {
+              "doctor": "stop"
+            },
+            {
+              "doctor": "display"
+            },
+            {
+              "doctor": "report_account"
+            }
+          ],
+          "configuration": "COMPROMISED",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-DISPLAY-WARNING",
+                "source": "email_admin",
+                "text": "Wyświetlona nazwa nadawcy nie pozwala określić mechanizmu wiadomości."
+              },
+              {
+                "id": "CL-ADMIN-SECURED",
+                "source": "email_admin",
+                "text": "Administrator zakończył nieuprawnione sesje."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "cc23034379e431853ad3fdf08630676307ab5f66db5f38c22a5168f68bb0c5e8",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": true,
+            "data_sent": false,
+            "defer_count": 0,
+            "ignored_count": 0,
+            "incident_report": "account",
+            "mailbox_compromised": true,
+            "mailbox_secured": true,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "check_display": "WYKONANE",
+            "report_spoof": "POTWIERDZONE",
+            "stop_send": "WYKONANE"
+          },
+          "choices": [
+            {
+              "doctor": "stop"
+            },
+            {
+              "doctor": "display"
+            },
+            {
+              "doctor": "report_spoof"
+            }
+          ],
+          "configuration": "COMPROMISED",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-DISPLAY-WARNING",
+                "source": "email_admin",
+                "text": "Wyświetlona nazwa nadawcy nie pozwala określić mechanizmu wiadomości."
+              },
+              {
+                "id": "CL-ADMIN-REPORT-SPOOF",
+                "source": "email_admin",
+                "text": "Zgłoszenie podejrzenia podszycia zarejestrowano, bez automatycznej zmiany stanu skrzynki."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "df994c82081dec34fe9b3f917c8f9f8ad5e8a187148ea43b7287af1dea2b08e9",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": true,
+            "data_sent": false,
+            "defer_count": 0,
+            "ignored_count": 0,
+            "incident_report": "spoof",
+            "mailbox_compromised": true,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "check_display": "WYKONANE",
+            "further_investigation": "ZLECONE",
+            "stop_send": "WYKONANE"
+          },
+          "choices": [
+            {
+              "doctor": "stop"
+            },
+            {
+              "doctor": "display"
+            },
+            {
+              "doctor": "investigate"
+            }
+          ],
+          "configuration": "COMPROMISED",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-DISPLAY-WARNING",
+                "source": "email_admin",
+                "text": "Wyświetlona nazwa nadawcy nie pozwala określić mechanizmu wiadomości."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "a6a589f21c6596993bd2e2095689c91de36ea4f57845668fb305154fe4723cad",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": true,
+            "data_sent": false,
+            "defer_count": 0,
+            "ignored_count": 0,
+            "incident_report": "none",
+            "mailbox_compromised": true,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "report_account": "POTWIERDZONE",
+            "stop_send": "WYKONANE"
+          },
+          "choices": [
+            {
+              "doctor": "stop"
+            },
+            {
+              "doctor": "none"
+            },
+            {
+              "doctor": "report_account"
+            }
+          ],
+          "configuration": "COMPROMISED",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-ADMIN-SECURED",
+                "source": "email_admin",
+                "text": "Administrator zakończył nieuprawnione sesje."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "f68bb0f6eb369cc125aecbbecbd23f1f9e5892c14526b9ca02f1d6eec4085af9",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": true,
+            "data_sent": false,
+            "defer_count": 0,
+            "ignored_count": 0,
+            "incident_report": "account",
+            "mailbox_compromised": true,
+            "mailbox_secured": true,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "report_spoof": "POTWIERDZONE",
+            "stop_send": "WYKONANE"
+          },
+          "choices": [
+            {
+              "doctor": "stop"
+            },
+            {
+              "doctor": "none"
+            },
+            {
+              "doctor": "report_spoof"
+            }
+          ],
+          "configuration": "COMPROMISED",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-ADMIN-REPORT-SPOOF",
+                "source": "email_admin",
+                "text": "Zgłoszenie podejrzenia podszycia zarejestrowano, bez automatycznej zmiany stanu skrzynki."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "2012e4bf596d1365f36ca6fcfdfc0ab1057e1697d55f6846c49a4cc9e56d3aad",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": true,
+            "data_sent": false,
+            "defer_count": 0,
+            "ignored_count": 0,
+            "incident_report": "spoof",
+            "mailbox_compromised": true,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "further_investigation": "ZLECONE",
+            "stop_send": "WYKONANE"
+          },
+          "choices": [
+            {
+              "doctor": "stop"
+            },
+            {
+              "doctor": "none"
+            },
+            {
+              "doctor": "investigate"
+            }
+          ],
+          "configuration": "COMPROMISED",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "1565c02a49f81118e59b0dc88b9020d6c5d0f1f8385de40005686342cc6e4fdf",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": true,
+            "data_sent": false,
+            "defer_count": 0,
+            "ignored_count": 0,
+            "incident_report": "none",
+            "mailbox_compromised": true,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "check_independent": "WYKONANE",
+            "report_account": "POTWIERDZONE"
+          },
+          "choices": [
+            {
+              "doctor": "defer"
+            },
+            {
+              "doctor": "independent"
+            },
+            {
+              "doctor": "report_account"
+            }
+          ],
+          "configuration": "COMPROMISED",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-DATA-SENT",
+                "source": "reception",
+                "text": "Wykaz został wysłany."
+              },
+              {
+                "id": "CL-RESULT-COMPROMISE",
+                "source": "email_admin",
+                "text": "Weryfikacja techniczna wykazała przejęcie skrzynki."
+              },
+              {
+                "id": "CL-ADMIN-SECURED",
+                "source": "email_admin",
+                "text": "Administrator zakończył nieuprawnione sesje."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "8d853dc3c7aaaa07f6e4f5860da93224d41313fefe695f0ba7cbdfd5c9329844",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": false,
+            "data_sent": true,
+            "defer_count": 1,
+            "ignored_count": 0,
+            "incident_report": "account",
+            "mailbox_compromised": true,
+            "mailbox_secured": true,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "check_independent": "WYKONANE",
+            "report_spoof": "POTWIERDZONE"
+          },
+          "choices": [
+            {
+              "doctor": "defer"
+            },
+            {
+              "doctor": "independent"
+            },
+            {
+              "doctor": "report_spoof"
+            }
+          ],
+          "configuration": "COMPROMISED",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-DATA-SENT",
+                "source": "reception",
+                "text": "Wykaz został wysłany."
+              },
+              {
+                "id": "CL-RESULT-COMPROMISE",
+                "source": "email_admin",
+                "text": "Weryfikacja techniczna wykazała przejęcie skrzynki."
+              },
+              {
+                "id": "CL-ADMIN-REPORT-SPOOF",
+                "source": "email_admin",
+                "text": "Zgłoszenie podejrzenia podszycia zarejestrowano, bez automatycznej zmiany stanu skrzynki."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "d0736211b401b6568cd8954290350dc479b7e2db02faa1421d0be4a655e2b451",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": false,
+            "data_sent": true,
+            "defer_count": 1,
+            "ignored_count": 0,
+            "incident_report": "spoof",
+            "mailbox_compromised": true,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "check_independent": "WYKONANE",
+            "further_investigation": "ZLECONE"
+          },
+          "choices": [
+            {
+              "doctor": "defer"
+            },
+            {
+              "doctor": "independent"
+            },
+            {
+              "doctor": "investigate"
+            }
+          ],
+          "configuration": "COMPROMISED",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-DATA-SENT",
+                "source": "reception",
+                "text": "Wykaz został wysłany."
+              },
+              {
+                "id": "CL-RESULT-COMPROMISE",
+                "source": "email_admin",
+                "text": "Weryfikacja techniczna wykazała przejęcie skrzynki."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "cb6f4a4d0ed2e9cc964bdc92b13ecd8a203d3c1a7955b9abcb418ad0d389463d",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": false,
+            "data_sent": true,
+            "defer_count": 1,
+            "ignored_count": 0,
+            "incident_report": "none",
+            "mailbox_compromised": true,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "check_display": "WYKONANE",
+            "report_account": "POTWIERDZONE"
+          },
+          "choices": [
+            {
+              "doctor": "defer"
+            },
+            {
+              "doctor": "display"
+            },
+            {
+              "doctor": "report_account"
+            }
+          ],
+          "configuration": "COMPROMISED",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-DATA-SENT",
+                "source": "reception",
+                "text": "Wykaz został wysłany."
+              },
+              {
+                "id": "CL-DISPLAY-WARNING",
+                "source": "email_admin",
+                "text": "Wyświetlona nazwa nadawcy nie pozwala określić mechanizmu wiadomości."
+              },
+              {
+                "id": "CL-ADMIN-SECURED",
+                "source": "email_admin",
+                "text": "Administrator zakończył nieuprawnione sesje."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "9f2bd51fc61ab496b20f081aadf35ea99e81eb4b2b39dc5a143caad5f6c18747",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": false,
+            "data_sent": true,
+            "defer_count": 1,
+            "ignored_count": 0,
+            "incident_report": "account",
+            "mailbox_compromised": true,
+            "mailbox_secured": true,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "check_display": "WYKONANE",
+            "report_spoof": "POTWIERDZONE"
+          },
+          "choices": [
+            {
+              "doctor": "defer"
+            },
+            {
+              "doctor": "display"
+            },
+            {
+              "doctor": "report_spoof"
+            }
+          ],
+          "configuration": "COMPROMISED",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-DATA-SENT",
+                "source": "reception",
+                "text": "Wykaz został wysłany."
+              },
+              {
+                "id": "CL-DISPLAY-WARNING",
+                "source": "email_admin",
+                "text": "Wyświetlona nazwa nadawcy nie pozwala określić mechanizmu wiadomości."
+              },
+              {
+                "id": "CL-ADMIN-REPORT-SPOOF",
+                "source": "email_admin",
+                "text": "Zgłoszenie podejrzenia podszycia zarejestrowano, bez automatycznej zmiany stanu skrzynki."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "a3e9794a55dbff86ace7a67ab07024be7c592141068e0b171bee505dde35f043",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": false,
+            "data_sent": true,
+            "defer_count": 1,
+            "ignored_count": 0,
+            "incident_report": "spoof",
+            "mailbox_compromised": true,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "check_display": "WYKONANE",
+            "further_investigation": "ZLECONE"
+          },
+          "choices": [
+            {
+              "doctor": "defer"
+            },
+            {
+              "doctor": "display"
+            },
+            {
+              "doctor": "investigate"
+            }
+          ],
+          "configuration": "COMPROMISED",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-DATA-SENT",
+                "source": "reception",
+                "text": "Wykaz został wysłany."
+              },
+              {
+                "id": "CL-DISPLAY-WARNING",
+                "source": "email_admin",
+                "text": "Wyświetlona nazwa nadawcy nie pozwala określić mechanizmu wiadomości."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "14afa4f240c5088c703838868e20c8eb8c35a671372dad56dfe9e54d8fd4ba70",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": false,
+            "data_sent": true,
+            "defer_count": 1,
+            "ignored_count": 0,
+            "incident_report": "none",
+            "mailbox_compromised": true,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "report_account": "POTWIERDZONE"
+          },
+          "choices": [
+            {
+              "doctor": "defer"
+            },
+            {
+              "doctor": "none"
+            },
+            {
+              "doctor": "report_account"
+            }
+          ],
+          "configuration": "COMPROMISED",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-DATA-SENT",
+                "source": "reception",
+                "text": "Wykaz został wysłany."
+              },
+              {
+                "id": "CL-ADMIN-SECURED",
+                "source": "email_admin",
+                "text": "Administrator zakończył nieuprawnione sesje."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "256c9599b4a1d0ce237c32d292a8f560265c573d8b14416be520e49ef2814b9c",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": false,
+            "data_sent": true,
+            "defer_count": 1,
+            "ignored_count": 0,
+            "incident_report": "account",
+            "mailbox_compromised": true,
+            "mailbox_secured": true,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "report_spoof": "POTWIERDZONE"
+          },
+          "choices": [
+            {
+              "doctor": "defer"
+            },
+            {
+              "doctor": "none"
+            },
+            {
+              "doctor": "report_spoof"
+            }
+          ],
+          "configuration": "COMPROMISED",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-DATA-SENT",
+                "source": "reception",
+                "text": "Wykaz został wysłany."
+              },
+              {
+                "id": "CL-ADMIN-REPORT-SPOOF",
+                "source": "email_admin",
+                "text": "Zgłoszenie podejrzenia podszycia zarejestrowano, bez automatycznej zmiany stanu skrzynki."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "f39f6608e4da854fe253a05a8100960b212ea2f7a3c14de5cad19effb3fc2c3f",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": false,
+            "data_sent": true,
+            "defer_count": 1,
+            "ignored_count": 0,
+            "incident_report": "spoof",
+            "mailbox_compromised": true,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "further_investigation": "ZLECONE"
+          },
+          "choices": [
+            {
+              "doctor": "defer"
+            },
+            {
+              "doctor": "none"
+            },
+            {
+              "doctor": "investigate"
+            }
+          ],
+          "configuration": "COMPROMISED",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-DATA-SENT",
+                "source": "reception",
+                "text": "Wykaz został wysłany."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "1b0fd0a0043a7e813897c28489dc977c5513e40be4cfc8001302c4dcb9380c12",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": false,
+            "data_sent": true,
+            "defer_count": 1,
+            "ignored_count": 0,
+            "incident_report": "none",
+            "mailbox_compromised": true,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "check_independent": "WYKONANE",
+            "report_account": "ZLECONE"
+          },
+          "choices": [
+            {
+              "doctor": "ignore"
+            },
+            {
+              "doctor": "independent"
+            },
+            {
+              "doctor": "report_account"
+            }
+          ],
+          "configuration": "COMPROMISED",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-DATA-SENT",
+                "source": "reception",
+                "text": "Wykaz został wysłany."
+              },
+              {
+                "id": "CL-RESULT-COMPROMISE",
+                "source": "email_admin",
+                "text": "Weryfikacja techniczna wykazała przejęcie skrzynki."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "aa69afa3ac095c62300c65bd8dbfcf9c19b593483e8e2c6d873657b31d5b6a53",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": false,
+            "data_sent": true,
+            "defer_count": 0,
+            "ignored_count": 1,
+            "incident_report": "account",
+            "mailbox_compromised": true,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "check_independent": "WYKONANE",
+            "report_spoof": "POTWIERDZONE"
+          },
+          "choices": [
+            {
+              "doctor": "ignore"
+            },
+            {
+              "doctor": "independent"
+            },
+            {
+              "doctor": "report_spoof"
+            }
+          ],
+          "configuration": "COMPROMISED",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-DATA-SENT",
+                "source": "reception",
+                "text": "Wykaz został wysłany."
+              },
+              {
+                "id": "CL-RESULT-COMPROMISE",
+                "source": "email_admin",
+                "text": "Weryfikacja techniczna wykazała przejęcie skrzynki."
+              },
+              {
+                "id": "CL-ADMIN-REPORT-SPOOF",
+                "source": "email_admin",
+                "text": "Zgłoszenie podejrzenia podszycia zarejestrowano, bez automatycznej zmiany stanu skrzynki."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "748042bbf8bcd38bd14384c30af5c32ec3d45663f38cc0d077871020536d8587",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": false,
+            "data_sent": true,
+            "defer_count": 0,
+            "ignored_count": 1,
+            "incident_report": "spoof",
+            "mailbox_compromised": true,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "check_independent": "WYKONANE",
+            "further_investigation": "ZLECONE"
+          },
+          "choices": [
+            {
+              "doctor": "ignore"
+            },
+            {
+              "doctor": "independent"
+            },
+            {
+              "doctor": "investigate"
+            }
+          ],
+          "configuration": "COMPROMISED",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-DATA-SENT",
+                "source": "reception",
+                "text": "Wykaz został wysłany."
+              },
+              {
+                "id": "CL-RESULT-COMPROMISE",
+                "source": "email_admin",
+                "text": "Weryfikacja techniczna wykazała przejęcie skrzynki."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "161b9373d80c665f2124deec9555788fad94c19be9eec719af66cba51c6e2d78",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": false,
+            "data_sent": true,
+            "defer_count": 0,
+            "ignored_count": 1,
+            "incident_report": "none",
+            "mailbox_compromised": true,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "check_display": "WYKONANE",
+            "report_account": "ZLECONE"
+          },
+          "choices": [
+            {
+              "doctor": "ignore"
+            },
+            {
+              "doctor": "display"
+            },
+            {
+              "doctor": "report_account"
+            }
+          ],
+          "configuration": "COMPROMISED",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-DATA-SENT",
+                "source": "reception",
+                "text": "Wykaz został wysłany."
+              },
+              {
+                "id": "CL-DISPLAY-WARNING",
+                "source": "email_admin",
+                "text": "Wyświetlona nazwa nadawcy nie pozwala określić mechanizmu wiadomości."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "fc11e5b40734a28f3d16aeeba1047b271d35aab213dd16ce486765925c69b1b4",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": false,
+            "data_sent": true,
+            "defer_count": 0,
+            "ignored_count": 1,
+            "incident_report": "account",
+            "mailbox_compromised": true,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "check_display": "WYKONANE",
+            "report_spoof": "POTWIERDZONE"
+          },
+          "choices": [
+            {
+              "doctor": "ignore"
+            },
+            {
+              "doctor": "display"
+            },
+            {
+              "doctor": "report_spoof"
+            }
+          ],
+          "configuration": "COMPROMISED",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-DATA-SENT",
+                "source": "reception",
+                "text": "Wykaz został wysłany."
+              },
+              {
+                "id": "CL-DISPLAY-WARNING",
+                "source": "email_admin",
+                "text": "Wyświetlona nazwa nadawcy nie pozwala określić mechanizmu wiadomości."
+              },
+              {
+                "id": "CL-ADMIN-REPORT-SPOOF",
+                "source": "email_admin",
+                "text": "Zgłoszenie podejrzenia podszycia zarejestrowano, bez automatycznej zmiany stanu skrzynki."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "2ec495826f9402715277d32e60a994aec971c0f6ffc618ab8944a22c1a8637c6",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": false,
+            "data_sent": true,
+            "defer_count": 0,
+            "ignored_count": 1,
+            "incident_report": "spoof",
+            "mailbox_compromised": true,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "check_display": "WYKONANE",
+            "further_investigation": "ZLECONE"
+          },
+          "choices": [
+            {
+              "doctor": "ignore"
+            },
+            {
+              "doctor": "display"
+            },
+            {
+              "doctor": "investigate"
+            }
+          ],
+          "configuration": "COMPROMISED",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-DATA-SENT",
+                "source": "reception",
+                "text": "Wykaz został wysłany."
+              },
+              {
+                "id": "CL-DISPLAY-WARNING",
+                "source": "email_admin",
+                "text": "Wyświetlona nazwa nadawcy nie pozwala określić mechanizmu wiadomości."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "ffb2e6ae90300d7b201eea0922040931cffa2058701e093ecadb996179b1cff7",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": false,
+            "data_sent": true,
+            "defer_count": 0,
+            "ignored_count": 1,
+            "incident_report": "none",
+            "mailbox_compromised": true,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "report_account": "ZLECONE"
+          },
+          "choices": [
+            {
+              "doctor": "ignore"
+            },
+            {
+              "doctor": "none"
+            },
+            {
+              "doctor": "report_account"
+            }
+          ],
+          "configuration": "COMPROMISED",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-DATA-SENT",
+                "source": "reception",
+                "text": "Wykaz został wysłany."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "5ecd4015af004311fe6d8e79f1925c1d820cc2ac11d58bd449a8589f4b6159ea",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": false,
+            "data_sent": true,
+            "defer_count": 0,
+            "ignored_count": 1,
+            "incident_report": "account",
+            "mailbox_compromised": true,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "report_spoof": "POTWIERDZONE"
+          },
+          "choices": [
+            {
+              "doctor": "ignore"
+            },
+            {
+              "doctor": "none"
+            },
+            {
+              "doctor": "report_spoof"
+            }
+          ],
+          "configuration": "COMPROMISED",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-DATA-SENT",
+                "source": "reception",
+                "text": "Wykaz został wysłany."
+              },
+              {
+                "id": "CL-ADMIN-REPORT-SPOOF",
+                "source": "email_admin",
+                "text": "Zgłoszenie podejrzenia podszycia zarejestrowano, bez automatycznej zmiany stanu skrzynki."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "e8e157a668782c84b808366b5c69ad21b2f74c0ab2e2c4a21d1a77a517e11751",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": false,
+            "data_sent": true,
+            "defer_count": 0,
+            "ignored_count": 1,
+            "incident_report": "spoof",
+            "mailbox_compromised": true,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "further_investigation": "ZLECONE"
+          },
+          "choices": [
+            {
+              "doctor": "ignore"
+            },
+            {
+              "doctor": "none"
+            },
+            {
+              "doctor": "investigate"
+            }
+          ],
+          "configuration": "COMPROMISED",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-DATA-SENT",
+                "source": "reception",
+                "text": "Wykaz został wysłany."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "dd31e613335a29bfd66314de5b54d8f5dd09f9573ebbd4025a5ba2c7f3fab6e0",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": false,
+            "data_sent": true,
+            "defer_count": 0,
+            "ignored_count": 1,
+            "incident_report": "none",
+            "mailbox_compromised": true,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "check_independent": "WYKONANE",
+            "report_account": "WYKONANE",
+            "stop_send": "WYKONANE"
+          },
+          "choices": [
+            {
+              "doctor": "stop"
+            },
+            {
+              "doctor": "independent"
+            },
+            {
+              "doctor": "report_account"
+            }
+          ],
+          "configuration": "SPOOF",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-RESULT-SPOOF",
+                "source": "email_admin",
+                "text": "Weryfikacja techniczna wskazuje podszycie, nie przejęcie skrzynki."
+              },
+              {
+                "id": "CL-ADMIN-NO-COMPROMISE",
+                "source": "email_admin",
+                "text": "Administrator przyjął i sprawdził zgłoszenie. Nie stwierdzono przejęcia skrzynki; nie było potrzeby zamykania sesji."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "96e469f1123c784e2200767a137e105f6db42008e7829a0d04c114a7879929b2",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": true,
+            "data_sent": false,
+            "defer_count": 0,
+            "ignored_count": 0,
+            "incident_report": "account",
+            "mailbox_compromised": false,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "check_independent": "WYKONANE",
+            "report_spoof": "POTWIERDZONE",
+            "stop_send": "WYKONANE"
+          },
+          "choices": [
+            {
+              "doctor": "stop"
+            },
+            {
+              "doctor": "independent"
+            },
+            {
+              "doctor": "report_spoof"
+            }
+          ],
+          "configuration": "SPOOF",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-RESULT-SPOOF",
+                "source": "email_admin",
+                "text": "Weryfikacja techniczna wskazuje podszycie, nie przejęcie skrzynki."
+              },
+              {
+                "id": "CL-ADMIN-REPORT-SPOOF",
+                "source": "email_admin",
+                "text": "Zgłoszenie podejrzenia podszycia zarejestrowano, bez automatycznej zmiany stanu skrzynki."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "59c47be5db3e847f75cb9028de4a432cc2fee64e41bd6c84b8160b32ef0fdd8d",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": true,
+            "data_sent": false,
+            "defer_count": 0,
+            "ignored_count": 0,
+            "incident_report": "spoof",
+            "mailbox_compromised": false,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "check_independent": "WYKONANE",
+            "further_investigation": "ZLECONE",
+            "stop_send": "WYKONANE"
+          },
+          "choices": [
+            {
+              "doctor": "stop"
+            },
+            {
+              "doctor": "independent"
+            },
+            {
+              "doctor": "investigate"
+            }
+          ],
+          "configuration": "SPOOF",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-RESULT-SPOOF",
+                "source": "email_admin",
+                "text": "Weryfikacja techniczna wskazuje podszycie, nie przejęcie skrzynki."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "44c325c276d46d61d3cfff2ad699909a5325c1405d25b2c0339eb898522fb0b5",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": true,
+            "data_sent": false,
+            "defer_count": 0,
+            "ignored_count": 0,
+            "incident_report": "none",
+            "mailbox_compromised": false,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "check_display": "WYKONANE",
+            "report_account": "WYKONANE",
+            "stop_send": "WYKONANE"
+          },
+          "choices": [
+            {
+              "doctor": "stop"
+            },
+            {
+              "doctor": "display"
+            },
+            {
+              "doctor": "report_account"
+            }
+          ],
+          "configuration": "SPOOF",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-DISPLAY-WARNING",
+                "source": "email_admin",
+                "text": "Wyświetlona nazwa nadawcy nie pozwala określić mechanizmu wiadomości."
+              },
+              {
+                "id": "CL-ADMIN-NO-COMPROMISE",
+                "source": "email_admin",
+                "text": "Administrator przyjął i sprawdził zgłoszenie. Nie stwierdzono przejęcia skrzynki; nie było potrzeby zamykania sesji."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "804c643b0977d3de262e300a7e0f5d8ff8952a3811924dc21c30c424770fea1f",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": true,
+            "data_sent": false,
+            "defer_count": 0,
+            "ignored_count": 0,
+            "incident_report": "account",
+            "mailbox_compromised": false,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "check_display": "WYKONANE",
+            "report_spoof": "POTWIERDZONE",
+            "stop_send": "WYKONANE"
+          },
+          "choices": [
+            {
+              "doctor": "stop"
+            },
+            {
+              "doctor": "display"
+            },
+            {
+              "doctor": "report_spoof"
+            }
+          ],
+          "configuration": "SPOOF",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-DISPLAY-WARNING",
+                "source": "email_admin",
+                "text": "Wyświetlona nazwa nadawcy nie pozwala określić mechanizmu wiadomości."
+              },
+              {
+                "id": "CL-ADMIN-REPORT-SPOOF",
+                "source": "email_admin",
+                "text": "Zgłoszenie podejrzenia podszycia zarejestrowano, bez automatycznej zmiany stanu skrzynki."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "522dce0d6ce45c6f1774d7a0651672ba276830c989e437b577a3ea0135c14906",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": true,
+            "data_sent": false,
+            "defer_count": 0,
+            "ignored_count": 0,
+            "incident_report": "spoof",
+            "mailbox_compromised": false,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "check_display": "WYKONANE",
+            "further_investigation": "ZLECONE",
+            "stop_send": "WYKONANE"
+          },
+          "choices": [
+            {
+              "doctor": "stop"
+            },
+            {
+              "doctor": "display"
+            },
+            {
+              "doctor": "investigate"
+            }
+          ],
+          "configuration": "SPOOF",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-DISPLAY-WARNING",
+                "source": "email_admin",
+                "text": "Wyświetlona nazwa nadawcy nie pozwala określić mechanizmu wiadomości."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "5467d1f6d13b3d9378ba1e155ac2726410ebb76e734ecec58b4874d73c169c7b",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": true,
+            "data_sent": false,
+            "defer_count": 0,
+            "ignored_count": 0,
+            "incident_report": "none",
+            "mailbox_compromised": false,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "report_account": "WYKONANE",
+            "stop_send": "WYKONANE"
+          },
+          "choices": [
+            {
+              "doctor": "stop"
+            },
+            {
+              "doctor": "none"
+            },
+            {
+              "doctor": "report_account"
+            }
+          ],
+          "configuration": "SPOOF",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-ADMIN-NO-COMPROMISE",
+                "source": "email_admin",
+                "text": "Administrator przyjął i sprawdził zgłoszenie. Nie stwierdzono przejęcia skrzynki; nie było potrzeby zamykania sesji."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "99e53da233993ef33f3761773cd47d04a3dee7b9bd0822b89a3aa3a347b47f1a",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": true,
+            "data_sent": false,
+            "defer_count": 0,
+            "ignored_count": 0,
+            "incident_report": "account",
+            "mailbox_compromised": false,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "report_spoof": "POTWIERDZONE",
+            "stop_send": "WYKONANE"
+          },
+          "choices": [
+            {
+              "doctor": "stop"
+            },
+            {
+              "doctor": "none"
+            },
+            {
+              "doctor": "report_spoof"
+            }
+          ],
+          "configuration": "SPOOF",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-ADMIN-REPORT-SPOOF",
+                "source": "email_admin",
+                "text": "Zgłoszenie podejrzenia podszycia zarejestrowano, bez automatycznej zmiany stanu skrzynki."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "f22290780f4e451314fa9850adbc9de71d1161b735857b4177aedc6ca9361591",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": true,
+            "data_sent": false,
+            "defer_count": 0,
+            "ignored_count": 0,
+            "incident_report": "spoof",
+            "mailbox_compromised": false,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "further_investigation": "ZLECONE",
+            "stop_send": "WYKONANE"
+          },
+          "choices": [
+            {
+              "doctor": "stop"
+            },
+            {
+              "doctor": "none"
+            },
+            {
+              "doctor": "investigate"
+            }
+          ],
+          "configuration": "SPOOF",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "8c10b26669835de653bdbb139d1022d0dfb835726600e204037ec51fda44658f",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": true,
+            "data_sent": false,
+            "defer_count": 0,
+            "ignored_count": 0,
+            "incident_report": "none",
+            "mailbox_compromised": false,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "check_independent": "WYKONANE",
+            "report_account": "WYKONANE"
+          },
+          "choices": [
+            {
+              "doctor": "defer"
+            },
+            {
+              "doctor": "independent"
+            },
+            {
+              "doctor": "report_account"
+            }
+          ],
+          "configuration": "SPOOF",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-DATA-SENT",
+                "source": "reception",
+                "text": "Wykaz został wysłany."
+              },
+              {
+                "id": "CL-RESULT-SPOOF",
+                "source": "email_admin",
+                "text": "Weryfikacja techniczna wskazuje podszycie, nie przejęcie skrzynki."
+              },
+              {
+                "id": "CL-ADMIN-NO-COMPROMISE",
+                "source": "email_admin",
+                "text": "Administrator przyjął i sprawdził zgłoszenie. Nie stwierdzono przejęcia skrzynki; nie było potrzeby zamykania sesji."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "03b79191fb22612f7464fcb7b66d886f553772ae912b84dc97b722af973a417b",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": false,
+            "data_sent": true,
+            "defer_count": 1,
+            "ignored_count": 0,
+            "incident_report": "account",
+            "mailbox_compromised": false,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "check_independent": "WYKONANE",
+            "report_spoof": "POTWIERDZONE"
+          },
+          "choices": [
+            {
+              "doctor": "defer"
+            },
+            {
+              "doctor": "independent"
+            },
+            {
+              "doctor": "report_spoof"
+            }
+          ],
+          "configuration": "SPOOF",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-DATA-SENT",
+                "source": "reception",
+                "text": "Wykaz został wysłany."
+              },
+              {
+                "id": "CL-RESULT-SPOOF",
+                "source": "email_admin",
+                "text": "Weryfikacja techniczna wskazuje podszycie, nie przejęcie skrzynki."
+              },
+              {
+                "id": "CL-ADMIN-REPORT-SPOOF",
+                "source": "email_admin",
+                "text": "Zgłoszenie podejrzenia podszycia zarejestrowano, bez automatycznej zmiany stanu skrzynki."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "52f793c2edf8463c6a9918136d202cd4e6984bdc16b399491815f6e0bf2e7133",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": false,
+            "data_sent": true,
+            "defer_count": 1,
+            "ignored_count": 0,
+            "incident_report": "spoof",
+            "mailbox_compromised": false,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "check_independent": "WYKONANE",
+            "further_investigation": "ZLECONE"
+          },
+          "choices": [
+            {
+              "doctor": "defer"
+            },
+            {
+              "doctor": "independent"
+            },
+            {
+              "doctor": "investigate"
+            }
+          ],
+          "configuration": "SPOOF",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-DATA-SENT",
+                "source": "reception",
+                "text": "Wykaz został wysłany."
+              },
+              {
+                "id": "CL-RESULT-SPOOF",
+                "source": "email_admin",
+                "text": "Weryfikacja techniczna wskazuje podszycie, nie przejęcie skrzynki."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "6d65357d4576460432bb2d83c9bc690fda85745ae08a98ce9e70b7470be6da8c",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": false,
+            "data_sent": true,
+            "defer_count": 1,
+            "ignored_count": 0,
+            "incident_report": "none",
+            "mailbox_compromised": false,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "check_display": "WYKONANE",
+            "report_account": "WYKONANE"
+          },
+          "choices": [
+            {
+              "doctor": "defer"
+            },
+            {
+              "doctor": "display"
+            },
+            {
+              "doctor": "report_account"
+            }
+          ],
+          "configuration": "SPOOF",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-DATA-SENT",
+                "source": "reception",
+                "text": "Wykaz został wysłany."
+              },
+              {
+                "id": "CL-DISPLAY-WARNING",
+                "source": "email_admin",
+                "text": "Wyświetlona nazwa nadawcy nie pozwala określić mechanizmu wiadomości."
+              },
+              {
+                "id": "CL-ADMIN-NO-COMPROMISE",
+                "source": "email_admin",
+                "text": "Administrator przyjął i sprawdził zgłoszenie. Nie stwierdzono przejęcia skrzynki; nie było potrzeby zamykania sesji."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "b0866425b0f69c1939cebbed1064673bbfd8d57316e1cf1df237b004da997322",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": false,
+            "data_sent": true,
+            "defer_count": 1,
+            "ignored_count": 0,
+            "incident_report": "account",
+            "mailbox_compromised": false,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "check_display": "WYKONANE",
+            "report_spoof": "POTWIERDZONE"
+          },
+          "choices": [
+            {
+              "doctor": "defer"
+            },
+            {
+              "doctor": "display"
+            },
+            {
+              "doctor": "report_spoof"
+            }
+          ],
+          "configuration": "SPOOF",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-DATA-SENT",
+                "source": "reception",
+                "text": "Wykaz został wysłany."
+              },
+              {
+                "id": "CL-DISPLAY-WARNING",
+                "source": "email_admin",
+                "text": "Wyświetlona nazwa nadawcy nie pozwala określić mechanizmu wiadomości."
+              },
+              {
+                "id": "CL-ADMIN-REPORT-SPOOF",
+                "source": "email_admin",
+                "text": "Zgłoszenie podejrzenia podszycia zarejestrowano, bez automatycznej zmiany stanu skrzynki."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "a85fe8890f4fccaafe91031e4734149ef7fec543095343d5010794967d0c1d7a",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": false,
+            "data_sent": true,
+            "defer_count": 1,
+            "ignored_count": 0,
+            "incident_report": "spoof",
+            "mailbox_compromised": false,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "check_display": "WYKONANE",
+            "further_investigation": "ZLECONE"
+          },
+          "choices": [
+            {
+              "doctor": "defer"
+            },
+            {
+              "doctor": "display"
+            },
+            {
+              "doctor": "investigate"
+            }
+          ],
+          "configuration": "SPOOF",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-DATA-SENT",
+                "source": "reception",
+                "text": "Wykaz został wysłany."
+              },
+              {
+                "id": "CL-DISPLAY-WARNING",
+                "source": "email_admin",
+                "text": "Wyświetlona nazwa nadawcy nie pozwala określić mechanizmu wiadomości."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "a2fa87da1e818a79bdcfc344bcff0b1f2180fa00474b2f7aadbc35d6e9e6f306",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": false,
+            "data_sent": true,
+            "defer_count": 1,
+            "ignored_count": 0,
+            "incident_report": "none",
+            "mailbox_compromised": false,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "report_account": "WYKONANE"
+          },
+          "choices": [
+            {
+              "doctor": "defer"
+            },
+            {
+              "doctor": "none"
+            },
+            {
+              "doctor": "report_account"
+            }
+          ],
+          "configuration": "SPOOF",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-DATA-SENT",
+                "source": "reception",
+                "text": "Wykaz został wysłany."
+              },
+              {
+                "id": "CL-ADMIN-NO-COMPROMISE",
+                "source": "email_admin",
+                "text": "Administrator przyjął i sprawdził zgłoszenie. Nie stwierdzono przejęcia skrzynki; nie było potrzeby zamykania sesji."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "5a5cf21d2e066719434a78d87eae13ba1cdfd63eaa9c8c5cb6410e38d43ca68d",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": false,
+            "data_sent": true,
+            "defer_count": 1,
+            "ignored_count": 0,
+            "incident_report": "account",
+            "mailbox_compromised": false,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "report_spoof": "POTWIERDZONE"
+          },
+          "choices": [
+            {
+              "doctor": "defer"
+            },
+            {
+              "doctor": "none"
+            },
+            {
+              "doctor": "report_spoof"
+            }
+          ],
+          "configuration": "SPOOF",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-DATA-SENT",
+                "source": "reception",
+                "text": "Wykaz został wysłany."
+              },
+              {
+                "id": "CL-ADMIN-REPORT-SPOOF",
+                "source": "email_admin",
+                "text": "Zgłoszenie podejrzenia podszycia zarejestrowano, bez automatycznej zmiany stanu skrzynki."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "b8ef13a69d471b14f6960a131a900633b7a0161a55daac71c133a9fb87880226",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": false,
+            "data_sent": true,
+            "defer_count": 1,
+            "ignored_count": 0,
+            "incident_report": "spoof",
+            "mailbox_compromised": false,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "further_investigation": "ZLECONE"
+          },
+          "choices": [
+            {
+              "doctor": "defer"
+            },
+            {
+              "doctor": "none"
+            },
+            {
+              "doctor": "investigate"
+            }
+          ],
+          "configuration": "SPOOF",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-DATA-SENT",
+                "source": "reception",
+                "text": "Wykaz został wysłany."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "f2562146ccfbbff488a25449454412b3a9f01cba41485fa4b594d2914a5aa34c",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": false,
+            "data_sent": true,
+            "defer_count": 1,
+            "ignored_count": 0,
+            "incident_report": "none",
+            "mailbox_compromised": false,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "check_independent": "WYKONANE",
+            "report_account": "WYKONANE"
+          },
+          "choices": [
+            {
+              "doctor": "ignore"
+            },
+            {
+              "doctor": "independent"
+            },
+            {
+              "doctor": "report_account"
+            }
+          ],
+          "configuration": "SPOOF",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-DATA-SENT",
+                "source": "reception",
+                "text": "Wykaz został wysłany."
+              },
+              {
+                "id": "CL-RESULT-SPOOF",
+                "source": "email_admin",
+                "text": "Weryfikacja techniczna wskazuje podszycie, nie przejęcie skrzynki."
+              },
+              {
+                "id": "CL-ADMIN-NO-COMPROMISE",
+                "source": "email_admin",
+                "text": "Administrator przyjął i sprawdził zgłoszenie. Nie stwierdzono przejęcia skrzynki; nie było potrzeby zamykania sesji."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "74d28051c6efce8ed2c18df1644d6ad9d678723398c5e8b21c602365d0322343",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": false,
+            "data_sent": true,
+            "defer_count": 0,
+            "ignored_count": 1,
+            "incident_report": "account",
+            "mailbox_compromised": false,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "check_independent": "WYKONANE",
+            "report_spoof": "POTWIERDZONE"
+          },
+          "choices": [
+            {
+              "doctor": "ignore"
+            },
+            {
+              "doctor": "independent"
+            },
+            {
+              "doctor": "report_spoof"
+            }
+          ],
+          "configuration": "SPOOF",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-DATA-SENT",
+                "source": "reception",
+                "text": "Wykaz został wysłany."
+              },
+              {
+                "id": "CL-RESULT-SPOOF",
+                "source": "email_admin",
+                "text": "Weryfikacja techniczna wskazuje podszycie, nie przejęcie skrzynki."
+              },
+              {
+                "id": "CL-ADMIN-REPORT-SPOOF",
+                "source": "email_admin",
+                "text": "Zgłoszenie podejrzenia podszycia zarejestrowano, bez automatycznej zmiany stanu skrzynki."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "3244fee2816bf13ec8f5cb9a416f9aa7c761d7512beb6b73ecda26a3f95a2938",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": false,
+            "data_sent": true,
+            "defer_count": 0,
+            "ignored_count": 1,
+            "incident_report": "spoof",
+            "mailbox_compromised": false,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "check_independent": "WYKONANE",
+            "further_investigation": "ZLECONE"
+          },
+          "choices": [
+            {
+              "doctor": "ignore"
+            },
+            {
+              "doctor": "independent"
+            },
+            {
+              "doctor": "investigate"
+            }
+          ],
+          "configuration": "SPOOF",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-DATA-SENT",
+                "source": "reception",
+                "text": "Wykaz został wysłany."
+              },
+              {
+                "id": "CL-RESULT-SPOOF",
+                "source": "email_admin",
+                "text": "Weryfikacja techniczna wskazuje podszycie, nie przejęcie skrzynki."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "8f3c08ffcb28aeabad1cc51e5f126020242908074c28597a9fd3f7a44ff0d58d",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": false,
+            "data_sent": true,
+            "defer_count": 0,
+            "ignored_count": 1,
+            "incident_report": "none",
+            "mailbox_compromised": false,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "check_display": "WYKONANE",
+            "report_account": "WYKONANE"
+          },
+          "choices": [
+            {
+              "doctor": "ignore"
+            },
+            {
+              "doctor": "display"
+            },
+            {
+              "doctor": "report_account"
+            }
+          ],
+          "configuration": "SPOOF",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-DATA-SENT",
+                "source": "reception",
+                "text": "Wykaz został wysłany."
+              },
+              {
+                "id": "CL-DISPLAY-WARNING",
+                "source": "email_admin",
+                "text": "Wyświetlona nazwa nadawcy nie pozwala określić mechanizmu wiadomości."
+              },
+              {
+                "id": "CL-ADMIN-NO-COMPROMISE",
+                "source": "email_admin",
+                "text": "Administrator przyjął i sprawdził zgłoszenie. Nie stwierdzono przejęcia skrzynki; nie było potrzeby zamykania sesji."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "89fb88650b1b9a9ed00d1b34cbdaf3d7926fd91bac7c9e7ce947622df7f6860e",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": false,
+            "data_sent": true,
+            "defer_count": 0,
+            "ignored_count": 1,
+            "incident_report": "account",
+            "mailbox_compromised": false,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "check_display": "WYKONANE",
+            "report_spoof": "POTWIERDZONE"
+          },
+          "choices": [
+            {
+              "doctor": "ignore"
+            },
+            {
+              "doctor": "display"
+            },
+            {
+              "doctor": "report_spoof"
+            }
+          ],
+          "configuration": "SPOOF",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-DATA-SENT",
+                "source": "reception",
+                "text": "Wykaz został wysłany."
+              },
+              {
+                "id": "CL-DISPLAY-WARNING",
+                "source": "email_admin",
+                "text": "Wyświetlona nazwa nadawcy nie pozwala określić mechanizmu wiadomości."
+              },
+              {
+                "id": "CL-ADMIN-REPORT-SPOOF",
+                "source": "email_admin",
+                "text": "Zgłoszenie podejrzenia podszycia zarejestrowano, bez automatycznej zmiany stanu skrzynki."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "eb690759321ed7e6c5d5eb38c8ccd82a18a45cdf3055359a0da410135e667b69",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": false,
+            "data_sent": true,
+            "defer_count": 0,
+            "ignored_count": 1,
+            "incident_report": "spoof",
+            "mailbox_compromised": false,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "check_display": "WYKONANE",
+            "further_investigation": "ZLECONE"
+          },
+          "choices": [
+            {
+              "doctor": "ignore"
+            },
+            {
+              "doctor": "display"
+            },
+            {
+              "doctor": "investigate"
+            }
+          ],
+          "configuration": "SPOOF",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-DATA-SENT",
+                "source": "reception",
+                "text": "Wykaz został wysłany."
+              },
+              {
+                "id": "CL-DISPLAY-WARNING",
+                "source": "email_admin",
+                "text": "Wyświetlona nazwa nadawcy nie pozwala określić mechanizmu wiadomości."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "3f2b43c21c18345f11b25c716e516eebf3ab2516c32f528d14df350016d4b2fc",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": false,
+            "data_sent": true,
+            "defer_count": 0,
+            "ignored_count": 1,
+            "incident_report": "none",
+            "mailbox_compromised": false,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "report_account": "WYKONANE"
+          },
+          "choices": [
+            {
+              "doctor": "ignore"
+            },
+            {
+              "doctor": "none"
+            },
+            {
+              "doctor": "report_account"
+            }
+          ],
+          "configuration": "SPOOF",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-DATA-SENT",
+                "source": "reception",
+                "text": "Wykaz został wysłany."
+              },
+              {
+                "id": "CL-ADMIN-NO-COMPROMISE",
+                "source": "email_admin",
+                "text": "Administrator przyjął i sprawdził zgłoszenie. Nie stwierdzono przejęcia skrzynki; nie było potrzeby zamykania sesji."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "0349edfb3cdbb3ca6a32a935389544d73ec391aabdca8ddd07047225ff6b98c5",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": false,
+            "data_sent": true,
+            "defer_count": 0,
+            "ignored_count": 1,
+            "incident_report": "account",
+            "mailbox_compromised": false,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "report_spoof": "POTWIERDZONE"
+          },
+          "choices": [
+            {
+              "doctor": "ignore"
+            },
+            {
+              "doctor": "none"
+            },
+            {
+              "doctor": "report_spoof"
+            }
+          ],
+          "configuration": "SPOOF",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-DATA-SENT",
+                "source": "reception",
+                "text": "Wykaz został wysłany."
+              },
+              {
+                "id": "CL-ADMIN-REPORT-SPOOF",
+                "source": "email_admin",
+                "text": "Zgłoszenie podejrzenia podszycia zarejestrowano, bez automatycznej zmiany stanu skrzynki."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "38d76d331c4889456d1ef6cfb8702648014250ca6330ebcec9ba9a80109763ad",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": false,
+            "data_sent": true,
+            "defer_count": 0,
+            "ignored_count": 1,
+            "incident_report": "spoof",
+            "mailbox_compromised": false,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        },
+        {
+          "actions": {
+            "further_investigation": "ZLECONE"
+          },
+          "choices": [
+            {
+              "doctor": "ignore"
+            },
+            {
+              "doctor": "none"
+            },
+            {
+              "doctor": "investigate"
+            }
+          ],
+          "configuration": "SPOOF",
+          "graph_end": null,
+          "knowledge": {
+            "doctor": [
+              {
+                "id": "CL-INTRO",
+                "source": "reception",
+                "text": "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany."
+              },
+              {
+                "id": "CL-DATA-SENT",
+                "source": "reception",
+                "text": "Wykaz został wysłany."
+              }
+            ],
+            "email_admin": [],
+            "reception": []
+          },
+          "outcome_sha256": "0dec9d304ec1766e5289aca8b3a4ba0fa3ff557b2c21ce89b0e7468c78b4e2c4",
+          "positions": {
+            "doctor": "start",
+            "email_admin": "start",
+            "reception": "start"
+          },
+          "world": {
+            "data_blocked": false,
+            "data_sent": true,
+            "defer_count": 0,
+            "ignored_count": 1,
+            "incident_report": "none",
+            "mailbox_compromised": false,
+            "mailbox_secured": false,
+            "suspicious_request": true
+          }
+        }
+      ],
+      "scenario_id": "B3-CLINIC-NIS2",
+      "shuffles_checked": 162,
+      "static": []
+    }
+  ],
+  "runner_version": "SSD-ENGINE-RUNNER 1.0",
+  "scenario_ids": [
+    "B3-CLINIC-NIS2"
+  ],
+  "total_paths": 54,
+  "total_shuffles": 162
+}

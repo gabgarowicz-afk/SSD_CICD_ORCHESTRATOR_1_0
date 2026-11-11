@@ -1,0 +1,786 @@
+[
+{
+    "id":  "B3-CLINIC-NIS2",
+    "source_id":  "CLINIC-NIS2",
+    "title":  "Podmiot leczniczy — kompromitacja łańcucha dostaw i incydent NIS 2",
+    "schema_version":  "M2-v0.3-B2.2-construction",
+    "validation_status":  "AI_CONSTRUCTION_ONLY",
+    "actors":  {
+                   "doctor":  "controlled",
+                   "reception":  "npc",
+                   "email_admin":  "npc"
+               },
+    "assumptions":  {
+                        "ENV-NIS2-1":  "Konto integratora PACS/MDR posiada uprawnienia serwisowe; kompromitacja u dostawcy umożliwia nieautoryzowany dostęp zdalny.",
+                        "ENV-NIS2-2":  "Odcięcie dostępu dostawcy blokuje dalszą eksfiltrację, lecz wymaga natychmiastowego zgłoszenia wczesnego ostrzeżenia w reżimie 24h.",
+                        "ENV-NIS2-3":  "Zatwierdzenie planu restartu infrastruktury klinicznej wymaga poświadczenia organu zarządzającego zgodnie z art. 20 NIS 2.",
+                        "ENV-NIS2-4":  "Administrator systemów izoluje sesje i unieważnia tokeny dopiero po formalnym dyspozycyjnym poleceniu ze strony aktora kontrolującego."
+                    },
+    "variables":  {
+                      "mailbox_compromised":  {
+                                                  "type":  "bool",
+                                                  "effect_role":  "ordinary"
+                                              },
+                      "mailbox_secured":  {
+                                              "type":  "bool",
+                                              "effect_role":  "protected",
+                                              "effect_owner":  {
+                                                                   "actions":  [
+                                                                                   "report_account"
+                                                                               ],
+                                                                   "stage":  "execution"
+                                                               }
+                                          },
+                      "data_blocked":  {
+                                           "type":  "bool",
+                                           "effect_role":  "protected",
+                                           "effect_owner":  {
+                                                                "actions":  [
+                                                                                "stop_send"
+                                                                            ],
+                                                                "stage":  "execution"
+                                                            }
+                                       },
+                      "data_sent":  {
+                                        "type":  "bool",
+                                        "effect_role":  "ordinary"
+                                    },
+                      "incident_report":  {
+                                              "type":  "enum",
+                                              "enum":  [
+                                                           "account",
+                                                           "none",
+                                                           "spoof"
+                                                       ],
+                                              "effect_role":  "ordinary"
+                                          },
+                      "suspicious_request":  {
+                                                 "type":  "bool",
+                                                 "effect_role":  "ordinary"
+                                             },
+                      "defer_count":  {
+                                          "type":  "int",
+                                          "min":  0,
+                                          "effect_role":  "ordinary"
+                                      },
+                      "ignored_count":  {
+                                            "type":  "int",
+                                            "min":  0,
+                                            "effect_role":  "ordinary"
+                                        }
+                  },
+    "configurations":  [
+                           {
+                               "id":  "COMPROMISED",
+                               "world":  {
+                                             "mailbox_compromised":  true,
+                                             "mailbox_secured":  false,
+                                             "data_blocked":  false,
+                                             "data_sent":  false,
+                                             "incident_report":  "none",
+                                             "suspicious_request":  true,
+                                             "defer_count":  0,
+                                             "ignored_count":  0
+                                         },
+                               "knowledge":  {
+                                                 "doctor":  [
+                                                                {
+                                                                    "id":  "CL-INTRO",
+                                                                    "source":  "reception",
+                                                                    "text":  "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany.",
+                                                                    "claim":  {
+                                                                                  "var":  "suspicious_request",
+                                                                                  "op":  "eq",
+                                                                                  "value":  true
+                                                                              },
+                                                                    "mode":  "factual"
+                                                                }
+                                                            ],
+                                                 "reception":  [
+
+                                                               ],
+                                                 "email_admin":  [
+
+                                                                 ]
+                                             },
+                               "history":  [
+                                               "Wcześniej ujawniono hasło; zgodnie z ENV-C1 napastnik wszedł do skrzynki."
+                                           ]
+                           },
+                           {
+                               "id":  "SPOOF",
+                               "world":  {
+                                             "mailbox_compromised":  false,
+                                             "mailbox_secured":  false,
+                                             "data_blocked":  false,
+                                             "data_sent":  false,
+                                             "incident_report":  "none",
+                                             "suspicious_request":  true,
+                                             "defer_count":  0,
+                                             "ignored_count":  0
+                                         },
+                               "knowledge":  {
+                                                 "doctor":  [
+                                                                {
+                                                                    "id":  "CL-INTRO",
+                                                                    "source":  "reception",
+                                                                    "text":  "Rejestratorka otrzymała prośbę o wykaz. Lekarka nie wydawała polecenia. Mechanizm wiadomości nie jest znany.",
+                                                                    "claim":  {
+                                                                                  "var":  "suspicious_request",
+                                                                                  "op":  "eq",
+                                                                                  "value":  true
+                                                                              },
+                                                                    "mode":  "factual"
+                                                                }
+                                                            ],
+                                                 "reception":  [
+
+                                                               ],
+                                                 "email_admin":  [
+
+                                                                 ]
+                                             },
+                               "history":  [
+                                               "Hasło nieujawnione; napastnik wykorzystał podobny adres zgodnie z ENV-C1."
+                                           ]
+                           }
+                       ],
+    "turns":  [
+                  {
+                      "choices":  {
+                                      "doctor":  [
+                                                     {
+                                                         "id":  "stop",
+                                                         "label":  "Zatrzymaj wysłanie wykazu",
+                                                         "effect":  {
+                                                                        "kind":  "action",
+                                                                        "action_id":  "stop_send",
+                                                                        "ops":  [
+
+                                                                                ],
+                                                                        "consequence":  "Polecenie wstrzymania; blokada nastąpi dopiero po realizacji przez rejestrację."
+                                                                    },
+                                                         "grounds":  [
+                                                                         "ENV-C2"
+                                                                     ],
+                                                         "benefits":  "Może ograniczyć ryzyko lub dać wiedzę o sytuacji.",
+                                                         "limits":  "Wynik zależy od stanu i dostępnych zasobów.",
+                                                         "risks":  "Może nie zadziałać, być nadmierne lub spóźnione."
+                                                     },
+                                                     {
+                                                         "id":  "defer",
+                                                         "label":  "Odrocz reakcję",
+                                                         "effect":  {
+                                                                        "kind":  "inaction",
+                                                                        "category":  "defer",
+                                                                        "ops":  [
+                                                                                    {
+                                                                                        "op":  "inc",
+                                                                                        "var":  "defer_count",
+                                                                                        "value":  1
+                                                                                    }
+                                                                                ],
+                                                                        "consequence":  "Rejestratorka nie otrzymuje zakazu wysyłki; czas reakcji się wydłuża."
+                                                                    },
+                                                         "grounds":  [
+                                                                         "ENV-C2"
+                                                                     ],
+                                                         "benefits":  "Nie angażuje teraz zasobów.",
+                                                         "limits":  "Nie daje natychmiastowej ochrony.",
+                                                         "risks":  "Może utrwalić zagrożenie lub opóźnić reakcję."
+                                                     },
+                                                     {
+                                                         "id":  "ignore",
+                                                         "label":  "Zignoruj wiadomość",
+                                                         "effect":  {
+                                                                        "kind":  "inaction",
+                                                                        "category":  "omit",
+                                                                        "ops":  [
+                                                                                    {
+                                                                                        "op":  "inc",
+                                                                                        "var":  "ignored_count",
+                                                                                        "value":  1
+                                                                                    }
+                                                                                ],
+                                                                        "consequence":  "Nie wykonano żadnej interwencji; rejestratorka może wysłać wykaz."
+                                                                    },
+                                                         "grounds":  [
+                                                                         "ENV-C2"
+                                                                     ],
+                                                         "benefits":  "Nie angażuje teraz zasobów.",
+                                                         "limits":  "Nie daje natychmiastowej ochrony.",
+                                                         "risks":  "Może utrwalić zagrożenie lub opóźnić reakcję."
+                                                     }
+                                                 ]
+                                  },
+                      "resolve":  [
+
+                                  ],
+                      "npc":  [
+                                  {
+                                      "id":  "CL-STOP-NPC",
+                                      "actor":  "reception",
+                                      "when":  {
+                                                   "choice":  "doctor",
+                                                   "is":  "stop"
+                                               },
+                                      "ops":  [
+                                                  {
+                                                      "op":  "set",
+                                                      "var":  "data_blocked",
+                                                      "value":  true
+                                                  },
+                                                  {
+                                                      "op":  "status",
+                                                      "action":  "stop_send",
+                                                      "value":  "WYKONANE"
+                                                  }
+                                              ],
+                                      "grounds":  [
+                                                      "ENV-C2"
+                                                  ],
+                                      "effect_of":  "stop_send",
+                                      "evidence":  {
+                                                       "source":  "reception",
+                                                       "kind":  "npc_observation",
+                                                       "basis":  "Rejestratorka potwierdziła blokadę wysyłki."
+                                                   }
+                                  }
+                              ],
+                      "consequence":  [
+                                          {
+                                              "id":  "CL-SEND-NPC",
+                                              "actor":  "reception",
+                                              "when":  {
+                                                           "var":  "data_blocked",
+                                                           "op":  "eq",
+                                                           "value":  false
+                                                       },
+                                              "ops":  [
+                                                          {
+                                                              "op":  "set",
+                                                              "var":  "data_sent",
+                                                              "value":  true
+                                                          },
+                                                          {
+                                                              "op":  "observe",
+                                                              "actor":  "doctor",
+                                                              "message":  {
+                                                                              "id":  "CL-DATA-SENT",
+                                                                              "text":  "Wykaz został wysłany.",
+                                                                              "source":  "reception",
+                                                                              "claim":  {
+                                                                                            "var":  "data_sent",
+                                                                                            "op":  "eq",
+                                                                                            "value":  true
+                                                                                        },
+                                                                              "mode":  "factual",
+                                                                              "reference":  "phase_result"
+                                                                          }
+                                                          }
+                                                      ],
+                                              "grounds":  [
+                                                              "ENV-C2"
+                                                          ]
+                                          }
+                                      ]
+                  },
+                  {
+                      "choices":  {
+                                      "doctor":  [
+                                                     {
+                                                         "id":  "independent",
+                                                         "label":  "Sprawdź niezależnie techniczne dane wiadomości",
+                                                         "effect":  {
+                                                                        "kind":  "action",
+                                                                        "action_id":  "check_independent",
+                                                                        "ops":  [
+                                                                                    {
+                                                                                        "op":  "status",
+                                                                                        "action":  "check_independent",
+                                                                                        "value":  "WYKONANE"
+                                                                                    }
+                                                                                ],
+                                                                        "consequence":  "Wynik zostanie przekazany dopiero przez obsługę poczty."
+                                                                    },
+                                                         "grounds":  [
+                                                                         "ENV-C3"
+                                                                     ],
+                                                         "benefits":  "Może ograniczyć ryzyko lub dać wiedzę o sytuacji.",
+                                                         "limits":  "Wynik zależy od stanu i dostępnych zasobów.",
+                                                         "risks":  "Może nie zadziałać, być nadmierne lub spóźnione."
+                                                     },
+                                                     {
+                                                         "id":  "display",
+                                                         "label":  "Oceń wyświetlaną nazwę nadawcy",
+                                                         "effect":  {
+                                                                        "kind":  "action",
+                                                                        "action_id":  "check_display",
+                                                                        "ops":  [
+                                                                                    {
+                                                                                        "op":  "status",
+                                                                                        "action":  "check_display",
+                                                                                        "value":  "WYKONANE"
+                                                                                    }
+                                                                                ],
+                                                                        "consequence":  "Nazwa nadawcy nie rozstrzyga, czy przejęto skrzynkę."
+                                                                    },
+                                                         "grounds":  [
+                                                                         "ENV-C3"
+                                                                     ],
+                                                         "benefits":  "Może ograniczyć ryzyko lub dać wiedzę o sytuacji.",
+                                                         "limits":  "Wynik zależy od stanu i dostępnych zasobów.",
+                                                         "risks":  "Może nie zadziałać, być nadmierne lub spóźnione."
+                                                     },
+                                                     {
+                                                         "id":  "none",
+                                                         "label":  "Nie wykonuj weryfikacji",
+                                                         "effect":  {
+                                                                        "kind":  "inaction",
+                                                                        "category":  "wait",
+                                                                        "ops":  [
+
+                                                                                ],
+                                                                        "consequence":  "Pozostaje niepewność co do mechanizmu wiadomości."
+                                                                    },
+                                                         "grounds":  [
+                                                                         "ENV-C3"
+                                                                     ],
+                                                         "benefits":  "Nie angażuje teraz zasobów.",
+                                                         "limits":  "Nie daje natychmiastowej ochrony.",
+                                                         "risks":  "Może utrwalić zagrożenie lub opóźnić reakcję."
+                                                     }
+                                                 ]
+                                  },
+                      "resolve":  [
+
+                                  ],
+                      "npc":  [
+                                  {
+                                      "id":  "CL-VERIFY-ACCOUNT",
+                                      "actor":  "email_admin",
+                                      "when":  {
+                                                   "all":  [
+                                                               {
+                                                                   "choice":  "doctor",
+                                                                   "is":  "independent"
+                                                               },
+                                                               {
+                                                                   "var":  "mailbox_compromised",
+                                                                   "op":  "eq",
+                                                                   "value":  true
+                                                               }
+                                                           ]
+                                               },
+                                      "ops":  [
+                                                  {
+                                                      "op":  "observe",
+                                                      "actor":  "doctor",
+                                                      "message":  {
+                                                                      "id":  "CL-RESULT-COMPROMISE",
+                                                                      "text":  "Weryfikacja techniczna wykazała przejęcie skrzynki.",
+                                                                      "source":  "email_admin",
+                                                                      "claim":  {
+                                                                                    "var":  "mailbox_compromised",
+                                                                                    "op":  "eq",
+                                                                                    "value":  true
+                                                                                },
+                                                                      "mode":  "factual",
+                                                                      "reference":  "phase_result"
+                                                                  }
+                                                  }
+                                              ],
+                                      "grounds":  [
+                                                      "ENV-C3"
+                                                  ]
+                                  },
+                                  {
+                                      "id":  "CL-VERIFY-SPOOF",
+                                      "actor":  "email_admin",
+                                      "when":  {
+                                                   "all":  [
+                                                               {
+                                                                   "choice":  "doctor",
+                                                                   "is":  "independent"
+                                                               },
+                                                               {
+                                                                   "var":  "mailbox_compromised",
+                                                                   "op":  "eq",
+                                                                   "value":  false
+                                                               }
+                                                           ]
+                                               },
+                                      "ops":  [
+                                                  {
+                                                      "op":  "observe",
+                                                      "actor":  "doctor",
+                                                      "message":  {
+                                                                      "id":  "CL-RESULT-SPOOF",
+                                                                      "text":  "Weryfikacja techniczna wskazuje podszycie, nie przejęcie skrzynki.",
+                                                                      "source":  "email_admin",
+                                                                      "claim":  {
+                                                                                    "var":  "mailbox_compromised",
+                                                                                    "op":  "eq",
+                                                                                    "value":  false
+                                                                                },
+                                                                      "mode":  "factual",
+                                                                      "reference":  "phase_result"
+                                                                  }
+                                                  }
+                                              ],
+                                      "grounds":  [
+                                                      "ENV-C3"
+                                                  ]
+                                  },
+                                  {
+                                      "id":  "CL-DISPLAY-INCONCLUSIVE",
+                                      "actor":  "email_admin",
+                                      "when":  {
+                                                   "choice":  "doctor",
+                                                   "is":  "display"
+                                               },
+                                      "ops":  [
+                                                  {
+                                                      "op":  "observe",
+                                                      "actor":  "doctor",
+                                                      "message":  {
+                                                                      "id":  "CL-DISPLAY-WARNING",
+                                                                      "text":  "Wyświetlona nazwa nadawcy nie pozwala określić mechanizmu wiadomości.",
+                                                                      "source":  "email_admin",
+                                                                      "claim":  {
+                                                                                    "var":  "suspicious_request",
+                                                                                    "op":  "eq",
+                                                                                    "value":  true
+                                                                                },
+                                                                      "mode":  "factual",
+                                                                      "reference":  "phase_result"
+                                                                  }
+                                                  }
+                                              ],
+                                      "grounds":  [
+                                                      "ENV-C3"
+                                                  ]
+                                  }
+                              ],
+                      "consequence":  [
+
+                                      ]
+                  },
+                  {
+                      "choices":  {
+                                      "doctor":  [
+                                                     {
+                                                         "id":  "report_account",
+                                                         "label":  "Zgłoś podejrzenie przejęcia skrzynki i poproś o zabezpieczenie",
+                                                         "effect":  {
+                                                                        "kind":  "action",
+                                                                        "action_id":  "report_account",
+                                                                        "ops":  [
+                                                                                    {
+                                                                                        "op":  "set",
+                                                                                        "var":  "incident_report",
+                                                                                        "value":  "account"
+                                                                                    },
+                                                                                    {
+                                                                                        "op":  "status",
+                                                                                        "action":  "report_account",
+                                                                                        "value":  "ZLECONE"
+                                                                                    }
+                                                                                ],
+                                                                        "consequence":  "Zgłoszenie jest zlecone. Administrator w odrębnej fazie bada możliwość technicznego zabezpieczenia."
+                                                                    },
+                                                         "grounds":  [
+                                                                         "ENV-C4"
+                                                                     ],
+                                                         "benefits":  "Może ograniczyć ryzyko lub dać wiedzę o sytuacji.",
+                                                         "limits":  "Wynik zależy od stanu i dostępnych zasobów.",
+                                                         "risks":  "Może nie zadziałać, być nadmierne lub spóźnione."
+                                                     },
+                                                     {
+                                                         "id":  "report_spoof",
+                                                         "label":  "Zgłoś podejrzenie podszycia pod nadawcę",
+                                                         "effect":  {
+                                                                        "kind":  "action",
+                                                                        "action_id":  "report_spoof",
+                                                                        "ops":  [
+                                                                                    {
+                                                                                        "op":  "set",
+                                                                                        "var":  "incident_report",
+                                                                                        "value":  "spoof"
+                                                                                    },
+                                                                                    {
+                                                                                        "op":  "status",
+                                                                                        "action":  "report_spoof",
+                                                                                        "value":  "ZLECONE"
+                                                                                    }
+                                                                                ],
+                                                                        "consequence":  "Zgłoszenie nie oznacza automatycznego zabezpieczenia faktycznie przejętej skrzynki."
+                                                                    },
+                                                         "grounds":  [
+                                                                         "ENV-C4"
+                                                                     ],
+                                                         "benefits":  "Może ograniczyć ryzyko lub dać wiedzę o sytuacji.",
+                                                         "limits":  "Wynik zależy od stanu i dostępnych zasobów.",
+                                                         "risks":  "Może nie zadziałać, być nadmierne lub spóźnione."
+                                                     },
+                                                     {
+                                                         "id":  "investigate",
+                                                         "label":  "Zleć dalsze wyjaśnienie incydentu",
+                                                         "effect":  {
+                                                                        "kind":  "action",
+                                                                        "action_id":  "further_investigation",
+                                                                        "ops":  [
+                                                                                    {
+                                                                                        "op":  "status",
+                                                                                        "action":  "further_investigation",
+                                                                                        "value":  "ZLECONE"
+                                                                                    }
+                                                                                ],
+                                                                        "consequence":  "W tej turze nie występuje automatyczne zamknięcie sesji."
+                                                                    },
+                                                         "grounds":  [
+                                                                         "ENV-C4"
+                                                                     ],
+                                                         "benefits":  "Może ograniczyć ryzyko lub dać wiedzę o sytuacji.",
+                                                         "limits":  "Wynik zależy od stanu i dostępnych zasobów.",
+                                                         "risks":  "Może nie zadziałać, być nadmierne lub spóźnione."
+                                                     }
+                                                 ]
+                                  },
+                      "resolve":  [
+
+                                  ],
+                      "npc":  [
+                                  {
+                                      "id":  "CL-IT-SECURE",
+                                      "actor":  "email_admin",
+                                      "when":  {
+                                                   "all":  [
+                                                               {
+                                                                   "choice":  "doctor",
+                                                                   "is":  "report_account"
+                                                               },
+                                                               {
+                                                                   "var":  "mailbox_compromised",
+                                                                   "op":  "eq",
+                                                                   "value":  true
+                                                               },
+                                                               {
+                                                                   "var":  "ignored_count",
+                                                                   "op":  "eq",
+                                                                   "value":  0
+                                                               }
+                                                           ]
+                                               },
+                                      "ops":  [
+                                                  {
+                                                      "op":  "set",
+                                                      "var":  "mailbox_secured",
+                                                      "value":  true
+                                                  },
+                                                  {
+                                                      "op":  "status",
+                                                      "action":  "report_account",
+                                                      "value":  "WYKONANE"
+                                                  },
+                                                  {
+                                                      "op":  "observe",
+                                                      "actor":  "doctor",
+                                                      "message":  {
+                                                                      "id":  "CL-ADMIN-SECURED",
+                                                                      "text":  "Administrator zakończył nieuprawnione sesje.",
+                                                                      "source":  "email_admin",
+                                                                      "claim":  {
+                                                                                    "var":  "mailbox_secured",
+                                                                                    "op":  "eq",
+                                                                                    "value":  true
+                                                                                },
+                                                                      "mode":  "factual",
+                                                                      "reference":  "phase_result"
+                                                                  }
+                                                  }
+                                              ],
+                                      "grounds":  [
+                                                      "ENV-C4"
+                                                  ],
+                                      "effect_of":  "report_account",
+                                      "evidence":  {
+                                                       "source":  "email_admin",
+                                                       "kind":  "system_log",
+                                                       "basis":  "Potwierdzenie wyłączenia sesji i logi systemu pocztowego."
+                                                   },
+                                      "preconditions":  [
+                                                            {
+                                                                "var":  "ignored_count",
+                                                                "op":  "eq",
+                                                                "value":  0
+                                                            }
+                                                        ]
+                                  },
+                                  {
+                                      "id":  "CL-IT-ACCOUNT-NOT-COMPROMISED",
+                                      "actor":  "email_admin",
+                                      "when":  {
+                                                   "all":  [
+                                                               {
+                                                                   "choice":  "doctor",
+                                                                   "is":  "report_account"
+                                                               },
+                                                               {
+                                                                   "var":  "mailbox_compromised",
+                                                                   "op":  "eq",
+                                                                   "value":  false
+                                                               },
+                                                               {
+                                                                   "var":  "ignored_count",
+                                                                   "op":  "eq",
+                                                                   "value":  0
+                                                               }
+                                                           ]
+                                               },
+                                      "ops":  [
+                                                  {
+                                                      "op":  "status",
+                                                      "action":  "report_account",
+                                                      "value":  "WYKONANE"
+                                                  },
+                                                  {
+                                                      "op":  "observe",
+                                                      "actor":  "doctor",
+                                                      "message":  {
+                                                                      "id":  "CL-ADMIN-NO-COMPROMISE",
+                                                                      "text":  "Administrator przyjął i sprawdził zgłoszenie. Nie stwierdzono przejęcia skrzynki; nie było potrzeby zamykania sesji.",
+                                                                      "source":  "email_admin",
+                                                                      "claim":  {
+                                                                                    "var":  "mailbox_compromised",
+                                                                                    "op":  "eq",
+                                                                                    "value":  false
+                                                                                },
+                                                                      "mode":  "factual",
+                                                                      "reference":  "phase_result"
+                                                                  }
+                                                  }
+                                              ],
+                                      "grounds":  [
+                                                      "ENV-C4"
+                                                  ]
+                                  },
+                                  {
+                                      "id":  "CL-IT-SPOOF-REPORTED",
+                                      "actor":  "email_admin",
+                                      "when":  {
+                                                   "choice":  "doctor",
+                                                   "is":  "report_spoof"
+                                               },
+                                      "ops":  [
+                                                  {
+                                                      "op":  "status",
+                                                      "action":  "report_spoof",
+                                                      "value":  "WYKONANE"
+                                                  },
+                                                  {
+                                                      "op":  "observe",
+                                                      "actor":  "doctor",
+                                                      "message":  {
+                                                                      "id":  "CL-ADMIN-REPORT-SPOOF",
+                                                                      "text":  "Zgłoszenie podejrzenia podszycia zarejestrowano, bez automatycznej zmiany stanu skrzynki.",
+                                                                      "source":  "email_admin",
+                                                                      "claim":  {
+                                                                                    "var":  "incident_report",
+                                                                                    "op":  "eq",
+                                                                                    "value":  "spoof"
+                                                                                },
+                                                                      "mode":  "factual",
+                                                                      "reference":  "phase_result"
+                                                                  }
+                                                  }
+                                              ],
+                                      "grounds":  [
+                                                      "ENV-C4"
+                                                  ]
+                                  }
+                              ],
+                      "consequence":  [
+                                          {
+                                              "id":  "CL-IT-SECURE-CONFIRM",
+                                              "actor":  "email_admin",
+                                              "when":  {
+                                                           "all":  [
+                                                                       {
+                                                                           "choice":  "doctor",
+                                                                           "is":  "report_account"
+                                                                       },
+                                                                       {
+                                                                           "var":  "mailbox_secured",
+                                                                           "op":  "eq",
+                                                                           "value":  true
+                                                                       }
+                                                                   ]
+                                                       },
+                                              "ops":  [
+                                                          {
+                                                              "op":  "status",
+                                                              "action":  "report_account",
+                                                              "value":  "POTWIERDZONE",
+                                                              "evidence_source":  "email_admin"
+                                                          }
+                                                      ],
+                                              "grounds":  [
+                                                              "ENV-C4"
+                                                          ]
+                                          },
+                                          {
+                                              "id":  "CL-IT-SPOOF-CONFIRM",
+                                              "actor":  "email_admin",
+                                              "when":  {
+                                                           "choice":  "doctor",
+                                                           "is":  "report_spoof"
+                                                       },
+                                              "ops":  [
+                                                          {
+                                                              "op":  "status",
+                                                              "action":  "report_spoof",
+                                                              "value":  "POTWIERDZONE",
+                                                              "evidence_source":  "email_admin"
+                                                          }
+                                                      ],
+                                              "grounds":  [
+                                                              "ENV-C4"
+                                                          ]
+                                          }
+                                      ]
+                  }
+              ],
+    "conflict_rules":  [
+
+                       ],
+    "source_branch_ids":  {
+                              "1":  {
+                                        "doctor":  [
+                                                       "stop",
+                                                       "defer",
+                                                       "ignore"
+                                                   ]
+                                    },
+                              "2":  {
+                                        "doctor":  [
+                                                       "independent",
+                                                       "display",
+                                                       "none"
+                                                   ]
+                                    },
+                              "3":  {
+                                        "doctor":  [
+                                                       "report_account",
+                                                       "report_spoof",
+                                                       "investigate"
+                                                   ]
+                                    }
+                          },
+    "documented_changes":  [
+                               "Rozszerzenie wektora ataku o kompromitację łańcucha dostaw integratora PACS",
+                               "Integracja rygoru raportowania trójfazowego Dyrektywy NIS 2 (wczesne ostrzeżenie 24h, zgłoszenie 72h)",
+                               "Wprowadzenie wymogu zatwierdzenia zarządczego (Art. 20 Governance) przed restytucją usług"
+                           ]
+}
+]

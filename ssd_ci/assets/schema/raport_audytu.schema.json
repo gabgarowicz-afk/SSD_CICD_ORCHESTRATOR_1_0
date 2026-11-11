@@ -1,0 +1,784 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ssd.local/schemas/ssd-audit-report-1.0.json",
+  "title": "SSD-AUDIT-REPORT 1.0",
+  "description": "Raport audytu konstrukcyjnego AI dla scenariuszy i silnika M2 v0.3. Nie jest walidacją w rozumieniu M1 3.5/3.8.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "report_version",
+    "run_context",
+    "status",
+    "validation_scope",
+    "human_validation_required",
+    "summary",
+    "checks",
+    "findings",
+    "escalation",
+    "generator_feedback",
+    "limitations"
+  ],
+  "properties": {
+    "report_version": {
+      "const": "SSD-AUDIT-REPORT 1.0"
+    },
+    "run_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_id",
+        "artifact_type",
+        "scenario_ids",
+        "scenario_sha256",
+        "engine_sha256",
+        "iteration",
+        "max_iterations",
+        "auditor_prompt_sha256",
+        "invariants_version"
+      ],
+      "properties": {
+        "run_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "artifact_type": {
+          "enum": [
+            "SCENARIO",
+            "ENGINE_CHANGE",
+            "BOTH"
+          ]
+        },
+        "scenario_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "scenario_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "engine_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "iteration": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_iterations": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10
+        },
+        "auditor_prompt_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "invariants_version": {
+          "type": "string",
+          "pattern": "^INV-[0-9]+\\.[0-9]+$"
+        }
+      }
+    },
+    "status": {
+      "enum": [
+        "PASS_CONSTRUCTION",
+        "FAIL",
+        "ESCALATE_HUMAN"
+      ]
+    },
+    "validation_scope": {
+      "const": "AI_CONSTRUCTION_ONLY"
+    },
+    "human_validation_required": {
+      "const": true
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 800
+    },
+    "checks": {
+      "type": "array",
+      "minItems": 16,
+      "maxItems": 16,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "invariant",
+          "result",
+          "basis",
+          "note"
+        ],
+        "properties": {
+          "invariant": {
+            "enum": [
+              "INV-01",
+              "INV-02",
+              "INV-03",
+              "INV-04",
+              "INV-05",
+              "INV-06",
+              "INV-07",
+              "INV-08",
+              "INV-09",
+              "INV-10",
+              "INV-11",
+              "INV-12",
+              "INV-13",
+              "INV-14",
+              "INV-15",
+              "INV-16"
+            ]
+          },
+          "result": {
+            "enum": [
+              "PASS",
+              "FAIL",
+              "NOT_APPLICABLE",
+              "NOT_VERIFIABLE",
+              "PENDING_IMPLEMENTATION"
+            ]
+          },
+          "basis": {
+            "enum": [
+              "DETERMINISTIC_ENGINE",
+              "STATIC_READING",
+              "SEMANTIC_JUDGEMENT",
+              "NONE"
+            ]
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 600
+          }
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "maxItems": 200,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "finding_id",
+          "invariant",
+          "severity",
+          "basis",
+          "engine_error_code",
+          "location",
+          "description",
+          "evidence_excerpt",
+          "remediation"
+        ],
+        "properties": {
+          "finding_id": {
+            "type": "string",
+            "pattern": "^F-[0-9]{3}$"
+          },
+          "invariant": {
+            "enum": [
+              "INV-01",
+              "INV-02",
+              "INV-03",
+              "INV-04",
+              "INV-05",
+              "INV-06",
+              "INV-07",
+              "INV-08",
+              "INV-09",
+              "INV-10",
+              "INV-11",
+              "INV-12",
+              "INV-13",
+              "INV-14",
+              "INV-15",
+              "INV-16"
+            ]
+          },
+          "severity": {
+            "enum": [
+              "BLOCKER",
+              "MAJOR",
+              "MINOR",
+              "NOTE"
+            ]
+          },
+          "basis": {
+            "enum": [
+              "DETERMINISTIC_ENGINE",
+              "STATIC_READING",
+              "SEMANTIC_JUDGEMENT"
+            ]
+          },
+          "engine_error_code": {
+            "anyOf": [
+              {
+                "enum": [
+                  "ACTION_ALREADY_INITIALIZED",
+                  "AMBIGUOUS_STATUS_PATH",
+                  "BAD_CLAIM",
+                  "BRAMKA_BEZ_UZASADNIENIA_INFORMACYJNEGO",
+                  "CHOICES_AFTER_END",
+                  "CHOICE_NOT_VISIBLE",
+                  "DEPENDENCY_SAME_PHASE",
+                  "DUPLICATE_OBSERVATION",
+                  "EFFECT_ACTION_NOT_SELECTED",
+                  "EMPTY_GRAPH",
+                  "ENGINE_CANNOT_SELF_CONFIRM_RESULT",
+                  "ENGINE_PRECONDITIONS_NOT_MET",
+                  "ENGINE_PRECONDITIONS_REQUIRED",
+                  "FORBIDDEN_GATE_REFERENCE",
+                  "GRAPH_ALREADY_FINISHED",
+                  "GRAPH_ALREADY_TERMINAL",
+                  "GRAPH_CHOICE_NOT_VISIBLE",
+                  "GRAPH_EDGE_AMBIGUOUS_OR_MISSING",
+                  "ILLEGAL_STATUS_TRANSITION",
+                  "INCOMPLETE_CHOICES",
+                  "INVALID_CHOICE",
+                  "INVALID_CONFLICT_POLICY",
+                  "INVALID_DEFINITION",
+                  "INVALID_EFFECT_EXECUTOR",
+                  "INVALID_EFFECT_OWNER",
+                  "INVALID_ENGINE_PRECONDITION",
+                  "INVALID_ENGINE_PROOF",
+                  "INVALID_ENUM",
+                  "INVALID_GATE",
+                  "INVALID_GRAPH",
+                  "INVALID_GRAPH_START_ACTORS",
+                  "INVALID_INC",
+                  "INVALID_INC_TYPE",
+                  "INVALID_NPC_PROOF",
+                  "INVALID_OBSERVATION",
+                  "INVALID_PREDICATE",
+                  "INVALID_STATUS_PATH",
+                  "INVALID_TURN_LIMIT",
+                  "INVALID_TYPE",
+                  "MISCLASSIFIED_FALSE_INFORMATION",
+                  "MISSING_GRAPH",
+                  "MISSING_RULE_GROUNDS",
+                  "NIESPOJNA_BRAMKA_INFORMACYJNA",
+                  "NO_STATUS_CHANGE",
+                  "NO_TERMINAL_NODE",
+                  "NO_VISIBLE_CHOICE",
+                  "PROTECTED_EFFECT_AT_SELECTION",
+                  "PROTECTED_EFFECT_IN_SELECTION_PHASE",
+                  "PROTECTED_EFFECT_WITHOUT_EVIDENCE",
+                  "PROTECTED_EFFECT_WITHOUT_EXECUTION",
+                  "PROTECTED_EFFECT_WITHOUT_STATUS",
+                  "REPEATED_ACTION_STILL_ACTIVE",
+                  "RESERVED_EXECUTOR_NAME",
+                  "RESOURCE_CONSTRAINT",
+                  "RESULT_REQUIRES_EVIDENCE",
+                  "RESULT_REQUIRES_GROUND",
+                  "RESULT_REQUIRES_PRIOR_ACTION",
+                  "RESULT_SAME_PHASE_AS_EXECUTION",
+                  "RESULT_SOURCE_NOT_INDEPENDENT",
+                  "RESULT_TRANSITION_NOT_SKIPPABLE",
+                  "SAME_PHASE_DEPENDENCY",
+                  "STATUS_UNINITIALIZED",
+                  "UNAUTHORIZED_EFFECT_OWNER",
+                  "UNCLASSIFIED_EFFECT",
+                  "UNDECLARED_FALSE_INFORMATION",
+                  "UNKNOWN_ACTOR",
+                  "UNKNOWN_EFFECT_OWNER",
+                  "UNKNOWN_OP",
+                  "UNKNOWN_PICK_ACTORS",
+                  "UNKNOWN_POSITION_ACTOR",
+                  "UNKNOWN_REFERENCE_TIME",
+                  "UNSYNCHRONIZED_TEMPLATES",
+                  "WRITE_CONFLICT"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "location": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "scenario_id",
+              "json_path",
+              "rule_ids",
+              "turn",
+              "phase",
+              "actor",
+              "configurations",
+              "engine_file"
+            ],
+            "properties": {
+              "scenario_id": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "json_path": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 300
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "rule_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "turn": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "phase": {
+                "anyOf": [
+                  {
+                    "enum": [
+                      "selection",
+                      "opening",
+                      "resolve",
+                      "npc",
+                      "consequence",
+                      "graph",
+                      "definition"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "actor": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "configurations": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "engine_file": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1200
+          },
+          "evidence_excerpt": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "remediation": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "target",
+              "instruction",
+              "must_not"
+            ],
+            "properties": {
+              "target": {
+                "enum": [
+                  "GENERATOR",
+                  "ENGINE_TEAM",
+                  "SCENARIO_AUTHOR",
+                  "HUMAN_REVIEW"
+                ]
+              },
+              "instruction": {
+                "type": "string",
+                "maxLength": 1500
+              },
+              "must_not": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 300
+                },
+                "maxItems": 10
+              }
+            }
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "basis": {
+                  "const": "DETERMINISTIC_ENGINE"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "engine_error_code": {
+                  "enum": [
+                    "ACTION_ALREADY_INITIALIZED",
+                    "AMBIGUOUS_STATUS_PATH",
+                    "BAD_CLAIM",
+                    "BRAMKA_BEZ_UZASADNIENIA_INFORMACYJNEGO",
+                    "CHOICES_AFTER_END",
+                    "CHOICE_NOT_VISIBLE",
+                    "DEPENDENCY_SAME_PHASE",
+                    "DUPLICATE_OBSERVATION",
+                    "EFFECT_ACTION_NOT_SELECTED",
+                    "EMPTY_GRAPH",
+                    "ENGINE_CANNOT_SELF_CONFIRM_RESULT",
+                    "ENGINE_PRECONDITIONS_NOT_MET",
+                    "ENGINE_PRECONDITIONS_REQUIRED",
+                    "FORBIDDEN_GATE_REFERENCE",
+                    "GRAPH_ALREADY_FINISHED",
+                    "GRAPH_ALREADY_TERMINAL",
+                    "GRAPH_CHOICE_NOT_VISIBLE",
+                    "GRAPH_EDGE_AMBIGUOUS_OR_MISSING",
+                    "ILLEGAL_STATUS_TRANSITION",
+                    "INCOMPLETE_CHOICES",
+                    "INVALID_CHOICE",
+                    "INVALID_CONFLICT_POLICY",
+                    "INVALID_DEFINITION",
+                    "INVALID_EFFECT_EXECUTOR",
+                    "INVALID_EFFECT_OWNER",
+                    "INVALID_ENGINE_PRECONDITION",
+                    "INVALID_ENGINE_PROOF",
+                    "INVALID_ENUM",
+                    "INVALID_GATE",
+                    "INVALID_GRAPH",
+                    "INVALID_GRAPH_START_ACTORS",
+                    "INVALID_INC",
+                    "INVALID_INC_TYPE",
+                    "INVALID_NPC_PROOF",
+                    "INVALID_OBSERVATION",
+                    "INVALID_PREDICATE",
+                    "INVALID_STATUS_PATH",
+                    "INVALID_TURN_LIMIT",
+                    "INVALID_TYPE",
+                    "MISCLASSIFIED_FALSE_INFORMATION",
+                    "MISSING_GRAPH",
+                    "MISSING_RULE_GROUNDS",
+                    "NIESPOJNA_BRAMKA_INFORMACYJNA",
+                    "NO_STATUS_CHANGE",
+                    "NO_TERMINAL_NODE",
+                    "NO_VISIBLE_CHOICE",
+                    "PROTECTED_EFFECT_AT_SELECTION",
+                    "PROTECTED_EFFECT_IN_SELECTION_PHASE",
+                    "PROTECTED_EFFECT_WITHOUT_EVIDENCE",
+                    "PROTECTED_EFFECT_WITHOUT_EXECUTION",
+                    "PROTECTED_EFFECT_WITHOUT_STATUS",
+                    "REPEATED_ACTION_STILL_ACTIVE",
+                    "RESERVED_EXECUTOR_NAME",
+                    "RESOURCE_CONSTRAINT",
+                    "RESULT_REQUIRES_EVIDENCE",
+                    "RESULT_REQUIRES_GROUND",
+                    "RESULT_REQUIRES_PRIOR_ACTION",
+                    "RESULT_SAME_PHASE_AS_EXECUTION",
+                    "RESULT_SOURCE_NOT_INDEPENDENT",
+                    "RESULT_TRANSITION_NOT_SKIPPABLE",
+                    "SAME_PHASE_DEPENDENCY",
+                    "STATUS_UNINITIALIZED",
+                    "UNAUTHORIZED_EFFECT_OWNER",
+                    "UNCLASSIFIED_EFFECT",
+                    "UNDECLARED_FALSE_INFORMATION",
+                    "UNKNOWN_ACTOR",
+                    "UNKNOWN_EFFECT_OWNER",
+                    "UNKNOWN_OP",
+                    "UNKNOWN_PICK_ACTORS",
+                    "UNKNOWN_POSITION_ACTOR",
+                    "UNKNOWN_REFERENCE_TIME",
+                    "UNSYNCHRONIZED_TEMPLATES",
+                    "WRITE_CONFLICT"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "basis": {
+                  "const": "SEMANTIC_JUDGEMENT"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "severity": {
+                  "enum": [
+                    "MAJOR",
+                    "MINOR",
+                    "NOTE"
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "escalation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required",
+        "reasons",
+        "questions_for_human"
+      ],
+      "properties": {
+        "required": {
+          "type": "boolean"
+        },
+        "reasons": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "INCOMPLETE_INPUT",
+              "ENGINE_SEMANTICS_CHANGED",
+              "ITERATION_LIMIT",
+              "HUMAN_JUDGEMENT_NEEDED",
+              "SUSPECTED_ENGINE_DEFECT",
+              "PROMPT_INJECTION_SUSPECTED",
+              "AUDITOR_CAPACITY"
+            ]
+          }
+        },
+        "questions_for_human": {
+          "type": "array",
+          "maxItems": 20,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "to_role",
+              "question",
+              "related_findings"
+            ],
+            "properties": {
+              "to_role": {
+                "enum": [
+                  "METODYK",
+                  "PROGRAMISTA_OPERATOR",
+                  "EKSPERT_KRYZYSOWY",
+                  "WLASCICIEL_PROJEKTU"
+                ]
+              },
+              "question": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 800
+              },
+              "related_findings": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^F-[0-9]{3}$"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "generator_feedback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "allowed",
+        "items"
+      ],
+      "properties": {
+        "allowed": {
+          "type": "boolean"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "finding_id",
+              "instruction"
+            ],
+            "properties": {
+              "finding_id": {
+                "type": "string",
+                "pattern": "^F-[0-9]{3}$"
+              },
+              "instruction": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1500
+              }
+            }
+          }
+        }
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 600
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "PASS_CONSTRUCTION"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "findings": {
+            "items": {
+              "properties": {
+                "severity": {
+                  "enum": [
+                    "MINOR",
+                    "NOTE"
+                  ]
+                }
+              }
+            }
+          },
+          "checks": {
+            "items": {
+              "properties": {
+                "result": {
+                  "enum": [
+                    "PASS",
+                    "NOT_APPLICABLE",
+                    "NOT_VERIFIABLE",
+                    "PENDING_IMPLEMENTATION"
+                  ]
+                }
+              }
+            }
+          },
+          "escalation": {
+            "properties": {
+              "required": {
+                "const": false
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "ESCALATE_HUMAN"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "escalation": {
+            "properties": {
+              "required": {
+                "const": true
+              },
+              "reasons": {
+                "minItems": 1
+              }
+            }
+          },
+          "generator_feedback": {
+            "properties": {
+              "allowed": {
+                "const": false
+              },
+              "items": {
+                "maxItems": 0
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "generator_feedback": {
+            "properties": {
+              "allowed": {
+                "const": false
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "generator_feedback": {
+            "properties": {
+              "items": {
+                "maxItems": 0
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

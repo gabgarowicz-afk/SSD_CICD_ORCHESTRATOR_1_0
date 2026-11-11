@@ -1,0 +1,11 @@
+Metadata-Version: 2.4
+Name: ssd-cicd-orchestrator
+Version: 1.0.0
+Summary: SSD M2 v0.3 construction audit orchestration; never human validation
+Requires-Python: >=3.11
+Requires-Dist: pydantic<3,>=2.9
+Requires-Dist: jsonschema<5,>=4.23
+Requires-Dist: httpx<1,>=0.27
+Requires-Dist: openai<4,>=2
+Provides-Extra: test
+Requires-Dist: pytest<11,>=8; extra == "test"

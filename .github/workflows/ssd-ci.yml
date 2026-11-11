@@ -1,0 +1,89 @@
+name: SSD — konstrukcyjna kontrola CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      run_external_audit:
+        description: 'Uruchomić Claude + opcjonalny Auto-Fix OpenAI (zużywa API)?'
+        type: boolean
+        default: false
+      allow_autofix:
+        description: 'Włączyć automatyczne propozycje zmian scenariuszy?'
+        type: boolean
+        default: false
+
+jobs:
+  deterministic:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned constraints for deployed environment
+        run: pip install -e '.[test]'
+      - name: Unit and integration tests
+        run: python -m pytest -q
+      - name: Full deterministic enumeration
+        run: |
+          python -m ssd_ci check \
+            --scenarios assets/scenarios/C0_SCENARIUSZE_GRAFOWE.json \
+            --engine-root assets/engine_ref \
+            --max-paths 2000 --shuffles 3 --output artifacts/deterministic
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ssd-deterministic-${{ github.run_id }}
+          path: artifacts/deterministic/
+
+  external_auditor:
+    if: github.event_name == 'workflow_dispatch' && inputs.run_external_audit
+    needs: deterministic
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      CLAUDE_MODEL_ID: ${{ vars.CLAUDE_MODEL_ID }}
+      OPENAI_MODEL_ID: ${{ vars.OPENAI_MODEL_ID }}
+      AUDITOR_PROMPT_B64: ${{ secrets.SSD_AUDITOR_PROMPT_B64 }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -e .
+      - name: Materialize exact v1.1 prompt from protected secret
+        shell: bash
+        run: |
+          test -n "$AUDITOR_PROMPT_B64"
+          umask 077
+          printf '%s' "$AUDITOR_PROMPT_B64" | base64 --decode > /tmp/ssd_auditor_prompt.md
+      - name: Run auditor (no automatic writes to source)
+        shell: bash
+        run: |
+          if [[ "${{ inputs.allow_autofix }}" == "true" ]]; then
+            python -m ssd_ci run \
+              --scenarios assets/scenarios/C0_SCENARIUSZE_GRAFOWE.json \
+              --engine-root assets/engine_ref \
+              --engine-baseline assets/engine_ref/BASELINE_ENGINE_SHA256.txt \
+              --prompt /tmp/ssd_auditor_prompt.md --claude-model "$CLAUDE_MODEL_ID" \
+              --openai-model "$OPENAI_MODEL_ID" --max-iterations 3 --output artifacts/external
+          else
+            python -m ssd_ci run \
+              --scenarios assets/scenarios/C0_SCENARIUSZE_GRAFOWE.json \
+              --engine-root assets/engine_ref \
+              --engine-baseline assets/engine_ref/BASELINE_ENGINE_SHA256.txt \
+              --prompt /tmp/ssd_auditor_prompt.md --claude-model "$CLAUDE_MODEL_ID" \
+              --disable-autofix --max-iterations 1 --output artifacts/external
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ssd-external-${{ github.run_id }}
+          path: artifacts/external/

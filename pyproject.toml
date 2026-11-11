@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ssd-cicd-orchestrator"
+version = "1.0.0"
+description = "SSD M2 v0.3 construction audit orchestration; never human validation"
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2.9,<3", "jsonschema>=4.23,<5", "httpx>=0.27,<1",
+    "openai>=2,<4"
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8,<11"]
+
+[project.scripts]
+ssd-audit = "ssd_ci.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["ssd_ci*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.setuptools.package-data]
+ssd_ci = [
+    "assets/schema/*.json",
+    "assets/scenarios/*.json",
+    "assets/engine_ref/*.py",
+    "assets/engine_ref/*.json",
+    "assets/engine_ref/*.txt",
+]

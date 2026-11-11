@@ -1,0 +1,2 @@
+[console_scripts]
+ssd-audit = ssd_ci.cli:main
