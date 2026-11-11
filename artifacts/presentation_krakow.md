@@ -64,3 +64,20 @@
 * Zarzut audytora / recenzenta: Dlaczego klasyczne testy jednostkowe reguł detekcji i korelacji są niewystarczające w środowisku szpitalnym o wysokim profilu ryzyka dla zdrowia i życia?
 * Wymóg normatywny: Art. 21 ust. 2 lit. a oraz e NIS 2 (analiza ryzyka, audyt techniczny i odporność systemów). Weryfikacja musi uwzględniać odporność na ciche degradacje reguł logicznych (semantic drift).
 * Rozwiązanie orkiestratora: Wdrożenie testów mutacyjnych w potoku CI (katalog artifacts/ssd_audit/B3_mutation_semantic). Celowe zaburzenia operatorów logicznych (np. zamiana koniunkcji na alternatywę w procedurze odcinania segmentu z pompami infuzyjnymi) muszą zostać natychmiast przechwycone przez orkiestrator jako naruszenie kontraktu semantycznego. Wskaźnik zabicia mutantów (mutation kill rate) stanowi dowód braku ukrytych ścieżek obejścia nadzoru.
+
+## Sekcja V: Formalizm dowodowy i linia obrony przed audytem (NIS 2 / ISO 27001)
+
+### 1. Przełamanie zarzutu pozornej mitygacji (art. 21 ust. 2 lit. c NIS 2)
+* Zarzut audytora / recenzenta: W jaki sposób organizacja dowodzi, że zamknięcie incydentu w SOAR/SIEM było rzeczywistą mitygacją podatności infrastrukturalnej, a nie jedynie zmianą statusu zgłoszenia w warstwie workflow?
+* Wymóg normatywny: Art. 21 ust. 2 lit. c NIS 2 (zarządzanie incydentami i ciągłość działania) w powiązaniu z art. 20 (odpowiedzialność osobista zarządu) oraz normą ISO/IEC 27001 (kontrole A.5.24 - A.5.28). Zgodność wymaga wykazania stanu faktycznego na poziomie zasobów, a nie deklaratywnego odznaczenia procedury.
+* Rozwiązanie orkiestratora: Zmiana stanu systemu na MITIGATED jest bramkowana twardą asercją logiczną w grafie decyzyjnym (scenariusz B3_CLINIC_NIS2.json wymusza ignored_count == 0). Dopóki telemetria aparatury medycznej wykazuje niezweryfikowane komponenty lub nieobsłużone wektory, graf blokuje przejście w stan bezpieczny. Mitygacja stanowi wynik dowodu formalnego, a nie decyzję dyskrecjonalną analityka.
+
+### 2. Nienaruszalność łańcucha dowodowego w relacji z dostawcą (art. 21 ust. 2 lit. d NIS 2)
+* Zarzut audytora / recenzenta: Jak wykazać należytą staranność przed organem nadzorczym (CSIRT sektorowy / Ministerstwo Zdrowia) w przypadku incydentu mającego źródło w zewnętrznej usłudze zarządzanej (MDR / zewnętrzny SOC)?
+* Wymóg normatywny: Art. 21 ust. 2 lit. d NIS 2 (bezpieczeństwo łańcucha dostaw) oraz wytyczne KSC i ISO/IEC 27001 (A.5.19 - A.5.22). Podmiot kluczowy ma obowiązek niezależnej weryfikacji operacji prowadzonych przez kontrahenta w jego strefie sieciowej.
+* Rozwiązanie orkiestratora: Każdy krok decyzyjny i tranzycja stanu są kryptograficznie pieczętowane skrótem SHA-256 i powiązane z surową telemetrią. Wygenerowany w potoku CI raport engine_report.json tworzy nierozerwalny, deterministyczny ślad wykonania (execution trace), uniemożliwiający dostawcy usług manipulację historią zdarzeń lub zatajenie opóźnień w reakcji.
+
+### 3. Odporność na dryf semantyczny i testowanie mutacyjne (art. 21 ust. 2 lit. a, e NIS 2)
+* Zarzut audytora / recenzenta: Dlaczego klasyczne testy jednostkowe reguł detekcji i korelacji są niewystarczające w środowisku szpitalnym o wysokim profilu ryzyka dla zdrowia i życia?
+* Wymóg normatywny: Art. 21 ust. 2 lit. a oraz e NIS 2 (analiza ryzyka, audyt techniczny i odporność systemów). Weryfikacja musi uwzględniać odporność na ciche degradacje reguł logicznych (semantic drift).
+* Rozwiązanie orkiestratora: Wdrożenie testów mutacyjnych w potoku CI (katalog artifacts/ssd_audit/B3_mutation_semantic). Celowe zaburzenia operatorów logicznych (np. zamiana koniunkcji na alternatywę w procedurze odcinania segmentu z pompami infuzyjnymi) muszą zostać natychmiast przechwycone przez orkiestrator jako naruszenie kontraktu semantycznego. Wskaźnik zabicia mutantów (mutation kill rate) stanowi dowód braku ukrytych ścieżek obejścia nadzoru.
