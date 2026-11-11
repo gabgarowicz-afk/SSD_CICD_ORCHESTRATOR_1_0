@@ -1,0 +1,267 @@
+[
+  {
+    "id": "D0-SILENT-FAILURE",
+    "source_id": "CLINIC-ICU",
+    "title": "Oddział Intensywnej Terapii — brak telemetrii węzła kardiomonitorów (Silent Node Failure)",
+    "schema_version": "M2-v0.3-B2.2-construction",
+    "validation_status": "PRÓBA_KONSTRUKCYJNA_C0",
+    "actors": {
+      "operator": "controlled",
+      "telemetry_node": "npc"
+    },
+    "assumptions": {
+      "ENV-D1": "Węzeł kardiomonitorów może ulec cichemu odcięciu telemetrii bez generowania jawnego błędu TCP RST.",
+      "ENV-D2": "Przejście w stan mitygacji bez izolacji milczącego węzła stanowi naruszenie ciągłości nadzoru klinicznego.",
+      "ENV-D3": "Jedyną dopuszczalną ścieżką formalną przy braku telemetrii jest wymuszona kwarantanna segmentu sieciowego."
+    },
+    "variables": {
+      "telemetry_active": {
+        "type": "bool",
+        "effect_role": "ordinary"
+      },
+      "telemetry_quarantined": {
+        "type": "bool",
+        "effect_role": "protected",
+        "effect_owner": {
+          "actions": [
+            "isolate_icu_segment"
+          ],
+          "stage": "execution"
+        }
+      },
+      "system_mitigated": {
+        "type": "bool",
+        "effect_role": "protected",
+        "effect_owner": {
+          "actions": [
+            "confirm_mitigation"
+          ],
+          "stage": "execution"
+        }
+      }
+    },
+    "turns": [
+      {
+        "opening": [],
+        "choices": {
+          "operator": [
+            {
+              "id": "poll_telemetry",
+              "label": "Odpytaj węzeł kardiomonitorów o sumę kontrolną",
+              "effect": {
+                "kind": "action",
+                "action_id": "poll_telemetry",
+                "ops": [],
+                "consequence": "Wysłano żądanie statusu do węzła ICU."
+              },
+              "grounds": [
+                "ENV-D1"
+              ],
+              "benefits": "Pozwala wykryć brak sygnału telemetrycznego.",
+              "limits": "Brak odpowiedzi nie determinuje przyczyny awarii.",
+              "risks": "Może opóźnić izolację w przypadku aktywnej eksfiltracji."
+            }
+          ]
+        },
+        "resolve": [],
+        "npc": []
+      },
+      {
+        "opening": [],
+        "choices": {
+          "operator": [
+            {
+              "id": "isolate_icu_segment",
+              "label": "Nałóż kwarantannę na segment ICU",
+              "effect": {
+                "kind": "action",
+                "action_id": "isolate_icu_segment",
+                "ops": [],
+                "consequence": "Zlecono izolację segmentu ICU."
+              },
+              "grounds": [
+                "ENV-D3"
+              ],
+              "benefits": "Zabezpiecza sieć kliniczną przed niezweryfikowanym węzłem.",
+              "limits": "Wymaga przejścia personelu na odczyty manualne.",
+              "risks": "Czasowe obciążenie personelu pielęgniarskiego."
+            },
+            {
+              "id": "bypass_and_ignore",
+              "label": "Pomiń brak odpowiedzi i uznaj segment za stabilny",
+              "effect": {
+                "kind": "inaction",
+                "category": "defer",
+                "ops": [],
+                "consequence": "Ignorowanie braku telemetrii; brak zmiany stanu bezpieczeństwa."
+              },
+              "grounds": [
+                "ENV-D2"
+              ],
+              "benefits": "Brak konieczności manualnej obsługi aparatury.",
+              "limits": "Pozostawia infrastrukturę bez ochrony.",
+              "risks": "Bezpośrednie zagrożenie pacjentów w przypadku sabotażu."
+            }
+          ]
+        },
+        "resolve": [],
+        "npc": [
+          {
+            "id": "D0-ISOLATE-EXEC",
+            "actor": "telemetry_node",
+            "when": {
+              "choice": "operator",
+              "is": "isolate_icu_segment"
+            },
+            "ops": [
+              {
+                "op": "set",
+                "var": "telemetry_quarantined",
+                "value": true
+              },
+              {
+                "op": "status",
+                "action": "isolate_icu_segment",
+                "value": "WYKONANE"
+              }
+            ],
+            "grounds": [
+              "ENV-D3"
+            ],
+            "effect_of": "isolate_icu_segment",
+            "evidence": {
+              "source": "telemetry_node",
+              "kind": "npc_observation",
+              "basis": "Reguła zapory sieciowej odcięła ruch portu kardiomonitorów."
+            }
+          }
+        ]
+      },
+      {
+        "opening": [],
+        "choices": {
+          "operator": [
+            {
+              "id": "confirm_mitigation",
+              "label": "Potwierdź formalną mitygację incydentu",
+              "effect": {
+                "kind": "action",
+                "action_id": "confirm_mitigation",
+                "ops": [],
+                "consequence": "Incydent zgłoszony do rejestru zdarzeń."
+              },
+              "grounds": [
+                "ENV-D2",
+                "ENV-D3"
+              ],
+              "benefits": "Formalne domknięcie procedury reagowania.",
+              "limits": "Wymaga wcześniejszego zabezpieczenia strefy incydentu.",
+              "risks": "Naruszenie niezmiennika jeśli kwarantanna nie nastąpiła."
+            }
+          ]
+        },
+        "resolve": [],
+        "npc": [
+          {
+            "id": "D0-CONFIRM-EXEC",
+            "actor": "telemetry_node",
+            "when": {
+              "choice": "operator",
+              "is": "confirm_mitigation"
+            },
+            "ops": [
+              {
+                "op": "set",
+                "var": "system_mitigated",
+                "value": true
+              },
+              {
+                "op": "status",
+                "action": "confirm_mitigation",
+                "value": "WYKONANE"
+              }
+            ],
+            "grounds": [
+              "ENV-D2"
+            ],
+            "effect_of": "confirm_mitigation",
+            "evidence": {
+              "source": "telemetry_node",
+              "kind": "npc_observation",
+              "basis": "Rejestr incydentów odnotował formalne zakończenie procedury."
+            }
+          }
+        ]
+      }
+    ],
+    "configurations": [
+      {
+        "id": "CFG_SILENT_DROP",
+        "world": {
+          "telemetry_active": false,
+          "telemetry_quarantined": false,
+          "system_mitigated": false
+        },
+        "knowledge": {
+          "operator": []
+        }
+      }
+    ],
+    "graph": {
+      "start": {
+        "operator": "operator.1"
+      },
+      "nodes": {
+        "operator.1": {
+          "actor": "operator",
+          "template_turn": 1,
+          "edges": [
+            {
+              "to": "operator.2"
+            }
+          ]
+        },
+        "operator.2": {
+          "actor": "operator",
+          "template_turn": 2,
+          "edges": [
+            {
+              "to": "operator.3"
+            }
+          ]
+        },
+        "operator.3": {
+          "actor": "operator",
+          "template_turn": 3,
+          "edges": [
+            {
+              "to": "operator.terminal_safe",
+              "when": {
+                "var": "telemetry_quarantined",
+                "op": "eq",
+                "value": true
+              }
+            },
+            {
+              "to": "operator.terminal_rejected",
+              "when": {
+                "var": "telemetry_quarantined",
+                "op": "eq",
+                "value": false
+              }
+            }
+          ]
+        },
+        "operator.terminal_safe": {
+          "actor": "operator",
+          "terminal": true
+        },
+        "operator.terminal_rejected": {
+          "actor": "operator",
+          "terminal": true
+        }
+      },
+      "max_turns": 5
+    }
+  }
+]

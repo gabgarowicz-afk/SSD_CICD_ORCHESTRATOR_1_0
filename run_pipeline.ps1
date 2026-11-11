@@ -102,6 +102,13 @@ if (-not (Test-Path -Path $targetDir)) {
 }
 Copy-Item -Path "artifacts\*" -Destination $targetDir -Recurse -Force
 Write-Host "Zakonczono sukcesem. Raport summary.md wygenerowany i zsynchronizowany z Dyskiem Google." -ForegroundColor Green
+Write-Host "4/6 Walidacja scenariusza D0 (Silent Node Failure)..." -ForegroundColor Cyan
+py -m ssd_ci check --scenarios assets/scenarios/D0_SILENT_FAILURE.json --shuffles 3 --output artifacts/ssd_audit/D0
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "Blad walidacji scenariusza D0." -ForegroundColor Red
+    exit $LASTEXITCODE
+}
+
 Write-Host "--- KROK: Negatywny test mutacyjny domeny B3 (weryfikacja odporności semantycznej) ---" -ForegroundColor Cyan
 py -m ssd_ci check --scenarios assets/scenarios/B3_MUTATION_SEMANTIC_VIOLATION.json --shuffles 3 --output artifacts/ssd_audit/B3_mutation_semantic 2>&1 | Out-Null
 $mutExitCode = $LASTEXITCODE
@@ -114,75 +121,3 @@ if ($mutExitCode -eq 2) {
     exit 1
 }
 
-Write-Host "--- Generowanie raportu podsumowującego (B2, C0, B3 + Testy Mutacyjne) ---" -ForegroundColor Cyan
-
-$b2Audit = Get-Content -Path "artifacts/ssd_audit/B2/audit_summary.json" -Raw -ErrorAction SilentlyContinue | ConvertFrom-Json
-$c0Audit = Get-Content -Path "artifacts/ssd_audit/C0/audit_summary.json" -Raw -ErrorAction SilentlyContinue | ConvertFrom-Json
-$b3Audit = Get-Content -Path "artifacts/ssd_audit/B3/audit_summary.json" -Raw -ErrorAction SilentlyContinue | ConvertFrom-Json
-
-$b2Paths = if ($b2Audit) { $b2Audit.enumerated } else { 108 }
-$b2Shuffles = if ($b2Audit) { $b2Audit.shuffles_checked } else { 324 }
-$c0Paths = if ($c0Audit) { $c0Audit.enumerated } else { 122 }
-$c0Shuffles = if ($c0Audit) { $c0Audit.shuffles_checked } else { 366 }
-$b3Paths = if ($b3Audit) { $b3Audit.enumerated } else { 54 }
-$b3Shuffles = if ($b3Audit) { $b3Audit.shuffles_checked } else { 162 }
-
-$totalPaths = $b2Paths + $c0Paths + $b3Paths
-$totalShuffles = $b2Shuffles + $c0Shuffles + $b3Shuffles
-$timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-$engineShaClean = "c39bf9b8a9d452a5e6387ee9e94f66214d570199930f5778a84808104f0d3450"
-
-$summaryMd = @"
-# Raport Walidacji Deterministycznej Potoku CI/CD
-**Projekt:** SSD_CICD_ORCHESTRATOR_1_0
-**Wersja silnika (runner_version):** SSD-ENGINE-RUNNER 1.0
-**Suma kontrolna silnika (SHA256):** ``$engineShaClean``
-**Data wykonania:** $timestamp
-**Status integralności:** ZGODNY / BRAK REGRESJI / ODPORNOŚĆ SEMANTYCZNA POTWIERDZONA
-
----
-
-## 1. Zbiorcze Metryki Wykonawcze
-
-| Parametr weryfikacji | Scenariusze B2 | Scenariusze C0 | Scenariusze B3 (NIS 2) | Łącznie |
-| :--- | :--- | :--- | :--- | :--- |
-| **Zbadane ścieżki decyzyjne** | $b2Paths | $c0Paths | $b3Paths | $totalPaths |
-| **Wykonane permutacje (shuffles)** | $b2Shuffles | $c0Shuffles | $b3Shuffles | $totalShuffles |
-| **Kompletność enumeracji** | True | True | True | TAK |
-| **Regresje sekwencyjne** | True | True | True | BRAK |
-| **Błędy silnika wykonawczego** | False | False | False | 0 |
-
----
-
-## 2. Wyniki Audytu Semantycznego i Invariantów
-
-### Domena B2 (Migracje Konstrukcyjne)
-- Scenariusz: `B2-CLINIC` | Ścieżki: 54 | Błędy definicji: 0 | Ostrzeżenia efektów: 0
-- Scenariusz: `B2-MUNICIPAL` | Ścieżki: 54 | Błędy definicji: 0 | Ostrzeżenia efektów: 0
-
-### Domena C0 (Scenariusze Grafowe)
-- Scenariusz: `C0-CLINIC` | Ścieżki: 54 | Błędy definicji: 0 | Ostrzeżenia efektów: 0
-- Scenariusz: `C0-MUNICIPAL` | Ścieżki: 54 | Błędy definicji: 0 | Ostrzeżenia efektów: 0
-- Scenariusz: `C0-RETRY` | Ścieżki: 7 | Błędy definicji: 0 | Ostrzeżenia efektów: 0
-- Scenariusz: `C0-DUO` | Ścieżki: 7 | Błędy definicji: 0 | Ostrzeżenia efektów: 0
-
-### Domena B3 (Zgodność z Dyrektywą NIS 2 - Podmioty Kluczowe)
-- Scenariusz: `B3-CLINIC-NIS2` | Ścieżki: 54 | Błędy definicji: 0 | Ostrzeżenia efektów: 0
-
----
-
-## 3. Audyt Odporności Semantycznej (Negative Mutation Testing)
-
-| Test mutacyjny | Cel reguły | Oczekiwany kod wyjścia | Otrzymany status | Wynik walidacji |
-| :--- | :--- | :--- | :--- | :--- |
-| `B3-MUTATION-SEMANTIC-VIOLATION` | Reguła `PROTECTED_EFFECT_AT_SELECTION` (ochrona zmiennej restytucyjnej bez zgody zarządu) | 2 (INVALID_DEFINITION) | Błąd definicji przechwycony przez `information_audit` | **ZALICZONY** |
-
----
-*Raport wygenerowany automatycznie przez procedurę potoku CI/CD orkiestratora.*
-"@
-
-$summaryPath = Join-Path (Get-Location) "artifacts\summary.md"
-[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
-$utf8WithBom = New-Object System.Text.UTF8Encoding($true)
-[System.IO.File]::WriteAllText($summaryPath, $summaryMd, $utf8WithBom)
-Write-Host "Zaktualizowano raport w $summaryPath" -ForegroundColor Green
