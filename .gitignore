@@ -3,3 +3,7 @@
 *$py.class
 .pytest_cache/
 *.tmp
+.env
+.env.local
+__pycache__/
+*.pyc
